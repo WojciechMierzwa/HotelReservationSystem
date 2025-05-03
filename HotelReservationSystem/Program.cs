@@ -16,6 +16,8 @@ builder.Services.AddScoped<ITypeInterface, TypeRepository>();
 builder.Services.AddScoped<IHotelInterface, HotelRepository>();
 
 builder.Services.AddScoped<IEmployeeInterface, EmployeeRepository>();
+builder.Services.AddScoped<IRoomInterface, RoomRepository>();
+
 
 
 
@@ -42,6 +44,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Employee}/{action=Index}/{id?}");
+    pattern: "{controller=Room}/{action=Index}/{id?}");
 
 app.Run();
