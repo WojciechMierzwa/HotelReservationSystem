@@ -7,13 +7,13 @@ namespace HotelReservationSystem.Controllers
 {
     public class GuestController : Controller
     {
-        private readonly GuestRepository _guestRepository;
+        private readonly IGuestInterface _guestRepository;
 
-        // Konstruktor wstrzykujący zależność repozytorium
-        public GuestController(GuestRepository guestRepository)
+        public GuestController(IGuestInterface guestRepository)
         {
             _guestRepository = guestRepository;
         }
+
 
         // GET: GuestController
         public ActionResult Index()
