@@ -13,6 +13,8 @@ builder.Services.AddDbContext<GuestManagerContext>(options =>
 builder.Services.AddScoped<IReservationInterface, ReservationRepository>();
 builder.Services.AddScoped<ITypeInterface, TypeRepository>();
 
+builder.Services.AddScoped<IHotelInterface, HotelRepository>();
+
 
 // Zarejestruj repozytorium dla goœci
 builder.Services.AddScoped<IGuestInterface, GuestRepository>();  // <-- Fix here
@@ -37,6 +39,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Type}/{action=Index}/{id?}");
+    pattern: "{controller=Hotel}/{action=Index}/{id?}");
 
 app.Run();
