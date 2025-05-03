@@ -13,6 +13,8 @@ namespace HotelReservationSystem.Models
         public DbSet<ReservationModel> Reservations { get; set; }
         public DbSet<TypeModel> Types { get; set; }
         public DbSet<HotelModel> Hotels { get; set; }
+        public DbSet<EmployeeModel> Employees { get; set; }
+
 
     }
 }

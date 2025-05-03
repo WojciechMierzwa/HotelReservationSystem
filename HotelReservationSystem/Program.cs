@@ -15,6 +15,9 @@ builder.Services.AddScoped<ITypeInterface, TypeRepository>();
 
 builder.Services.AddScoped<IHotelInterface, HotelRepository>();
 
+builder.Services.AddScoped<IEmployeeInterface, EmployeeRepository>();
+
+
 
 // Zarejestruj repozytorium dla goœci
 builder.Services.AddScoped<IGuestInterface, GuestRepository>();  // <-- Fix here
@@ -39,6 +42,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Hotel}/{action=Index}/{id?}");
+    pattern: "{controller=Employee}/{action=Index}/{id?}");
 
 app.Run();
