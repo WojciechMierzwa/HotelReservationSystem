@@ -17,6 +17,7 @@ builder.Services.AddScoped<IHotelInterface, HotelRepository>();
 
 builder.Services.AddScoped<IEmployeeInterface, EmployeeRepository>();
 builder.Services.AddScoped<IRoomInterface, RoomRepository>();
+builder.Services.AddScoped<IReservationRoomInterface, ReservationRoomRepository>();
 
 
 
