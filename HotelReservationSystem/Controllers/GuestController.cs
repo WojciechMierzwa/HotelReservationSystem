@@ -7,10 +7,10 @@ namespace HotelReservationSystem.Controllers
 {
     public class GuestController : Controller
     {
-        private readonly IGuestRepository _guestRepository;
+        private readonly GuestRepository _guestRepository;
 
         // Konstruktor wstrzykujący zależność repozytorium
-        public GuestController(IGuestRepository guestRepository)
+        public GuestController(GuestRepository guestRepository)
         {
             _guestRepository = guestRepository;
         }

@@ -9,8 +9,11 @@ builder.Services.AddDbContext<GuestManagerContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("GuestManagerDatabase"))
 );
 
-// Zarejestruj repozytorium GuestRepository
-builder.Services.AddTransient<IGuestRepository, IGuestRepository>();
+// Zarejestruj repozytorium dla rezerwacji
+builder.Services.AddScoped<IReservationInterface, ReservationRepository>();
+
+// Zarejestruj repozytorium dla goœci
+builder.Services.AddScoped<IGuestInterface, GuestRepository>();  // <-- Fix here
 
 // Dodaj kontrolery z widokami
 builder.Services.AddControllersWithViews();
@@ -32,6 +35,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Guest}/{action=Index}/{id?}");
+    pattern: "{controller=Reservation}/{action=Index}/{id?}");
 
 app.Run();

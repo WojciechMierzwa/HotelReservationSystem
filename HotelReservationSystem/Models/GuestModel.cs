@@ -40,5 +40,8 @@ namespace HotelReservationSystem.Models
         [DisplayName("Telefon")]
         [MaxLength(15, ErrorMessage = "Telefon nie może mieć więcej niż 15 znaków.")]
         public string Phone { get; set; }
+
+        [NotMapped]
+        public string FullName => $"{Name} {Surname}";
     }
 }

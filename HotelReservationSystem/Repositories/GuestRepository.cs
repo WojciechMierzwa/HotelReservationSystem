@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 
 namespace HotelReservationSystem.Repositories
 {
-    public class IGuestRepository : IGuestInterface
+    public class GuestRepository : IGuestInterface
     {
         private readonly GuestManagerContext _context;
-        public IGuestRepository(GuestManagerContext context)
+        public GuestRepository(GuestManagerContext context)
         {
             _context = context;
         }

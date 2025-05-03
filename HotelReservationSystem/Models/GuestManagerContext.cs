@@ -1,8 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace HotelReservationSystem.Models
 {
@@ -11,6 +8,8 @@ namespace HotelReservationSystem.Models
         public GuestManagerContext(DbContextOptions<GuestManagerContext> options) : base(options)
         {
         }
+
         public DbSet<GuestModel> Guests { get; set; }
+        public DbSet<ReservationModel> Reservations { get; set; }
     }
 }
