@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace HotelReservationSystem.Models
 {
-    public class GuestManagerContext : DbContext
+    public class ManagerContext : DbContext
     {
-        public GuestManagerContext(DbContextOptions<GuestManagerContext> options) : base(options)
+        public ManagerContext(DbContextOptions<ManagerContext> options) : base(options)
         {
         }
 
@@ -16,6 +16,7 @@ namespace HotelReservationSystem.Models
         public DbSet<EmployeeModel> Employees { get; set; }
         public DbSet<RoomModel> Rooms { get; set; }
         public DbSet<ReservationRoomModel> ReservationRooms { get; set; }
+
 
 
     }

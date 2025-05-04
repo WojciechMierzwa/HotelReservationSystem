@@ -7,9 +7,9 @@ namespace HotelReservationSystem.Repositories
 {
     public class TypeRepository : ITypeInterface
     {
-        private readonly GuestManagerContext _context;
+        private readonly ManagerContext _context;
 
-        public TypeRepository(GuestManagerContext context)
+        public TypeRepository(ManagerContext context)
         {
             _context = context;
         }

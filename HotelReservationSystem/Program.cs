@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Dodaj konfiguracjê po³¹czenia z baz¹ danych
-builder.Services.AddDbContext<GuestManagerContext>(options =>
+builder.Services.AddDbContext<ManagerContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("GuestManagerDatabase"))
 );
 
@@ -18,6 +18,8 @@ builder.Services.AddScoped<IHotelInterface, HotelRepository>();
 builder.Services.AddScoped<IEmployeeInterface, EmployeeRepository>();
 builder.Services.AddScoped<IRoomInterface, RoomRepository>();
 builder.Services.AddScoped<IReservationRoomInterface, ReservationRoomRepository>();
+
+
 
 
 
@@ -45,6 +47,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Room}/{action=Index}/{id?}");
+    pattern: "{controller=ReservationRoom}/{action=Index}/{id?}");
 
 app.Run();

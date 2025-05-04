@@ -1,13 +1,15 @@
-﻿using HotelReservationSystem.Models;
+﻿using System.Collections.Generic;
+using HotelReservationSystem.Models;
 
 namespace HotelReservationSystem.Repositories
 {
     public interface IReservationRoomInterface
     {
+        IEnumerable<ReservationRoomModel> GetAll();
+        ReservationRoomModel Get(int id);
         void Add(ReservationRoomModel reservationRoom);
         void Delete(int id);
-        IEnumerable<ReservationRoomModel> GetAll();
-        IEnumerable<ReservationRoomModel> GetByReservationId(int reservationId);
-    }
+        void Update(int id, ReservationRoomModel reservationRoom);
 
+    }
 }

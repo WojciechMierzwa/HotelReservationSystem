@@ -7,9 +7,9 @@ namespace HotelReservationSystem.Repositories
 {
     public class HotelRepository : IHotelInterface
     {
-        private readonly GuestManagerContext _context;
+        private readonly ManagerContext _context;
 
-        public HotelRepository(GuestManagerContext context)
+        public HotelRepository(ManagerContext context)
         {
             _context = context;
         }
