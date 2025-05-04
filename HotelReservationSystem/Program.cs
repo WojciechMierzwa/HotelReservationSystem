@@ -8,6 +8,17 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ManagerContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("GuestManagerDatabase"))
 );
+var supportedCultures = new[] { "pl-PL" };
+
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    options.SetDefaultCulture("pl-PL")
+        .AddSupportedCultures(supportedCultures)
+        .AddSupportedUICultures(supportedCultures);
+});
+
+builder.Services.AddControllersWithViews();
+
 
 // Rejestracja repozytoriów
 builder.Services.AddScoped<IReservationInterface, ReservationRepository>();
@@ -39,6 +50,10 @@ app.UseAuthorization();
 // Mapowanie tras
 app.MapControllerRoute(
     name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.MapControllerRoute(
+    name: "ReservationRoom",
     pattern: "{controller=ReservationRoom}/{action=Index}/{id?}");
 
 app.MapControllerRoute(
