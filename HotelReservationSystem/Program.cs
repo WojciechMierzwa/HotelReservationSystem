@@ -9,23 +9,14 @@ builder.Services.AddDbContext<ManagerContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("GuestManagerDatabase"))
 );
 
-// Zarejestruj repozytorium dla rezerwacji
+// Rejestracja repozytoriów
 builder.Services.AddScoped<IReservationInterface, ReservationRepository>();
 builder.Services.AddScoped<ITypeInterface, TypeRepository>();
-
 builder.Services.AddScoped<IHotelInterface, HotelRepository>();
-
 builder.Services.AddScoped<IEmployeeInterface, EmployeeRepository>();
 builder.Services.AddScoped<IRoomInterface, RoomRepository>();
 builder.Services.AddScoped<IReservationRoomInterface, ReservationRoomRepository>();
-
-
-
-
-
-
-// Zarejestruj repozytorium dla goœci
-builder.Services.AddScoped<IGuestInterface, GuestRepository>();  // <-- Fix here
+builder.Services.AddScoped<IGuestInterface, GuestRepository>();
 
 // Dodaj kontrolery z widokami
 builder.Services.AddControllersWithViews();
@@ -45,8 +36,33 @@ app.UseRouting();
 
 app.UseAuthorization();
 
+// Mapowanie tras
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=ReservationRoom}/{action=Index}/{id?}");
+
+app.MapControllerRoute(
+    name: "reservation",
+    pattern: "{controller=Reservation}/{action=Index}/{id?}");
+
+app.MapControllerRoute(
+    name: "room",
+    pattern: "{controller=Room}/{action=Index}/{id?}");
+
+app.MapControllerRoute(
+    name: "employee",
+    pattern: "{controller=Employee}/{action=Index}/{id?}");
+
+app.MapControllerRoute(
+    name: "guest",
+    pattern: "{controller=Guest}/{action=Index}/{id?}");
+
+app.MapControllerRoute(
+    name: "hotel",
+    pattern: "{controller=Hotel}/{action=Index}/{id?}");
+
+app.MapControllerRoute(
+    name: "type",
+    pattern: "{controller=Type}/{action=Index}/{id?}");
 
 app.Run();

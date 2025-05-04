@@ -12,24 +12,59 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">HotelReservationSystem</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Hotel Reservation System</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
+                        <!-- Link to Home page -->
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
+
+                   
+
+                        <!-- Link to Reservation page -->
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Reservation" asp-action="Index">Reservations</a>
+                        </li>
+
+                        <!-- Link to Room page -->
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Room" asp-action="Index">Rooms</a>
+                        </li>
+
+                        <!-- Link to ReservationRoom page -->
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="ReservationRoom" asp-action="Index">Reservation Rooms</a>
+                        </li>
+
+                        <!-- Link to Hotel page -->
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Hotel" asp-action="Index">Hotels</a>
+                        </li>
+
+                        <!-- Link to Type page -->
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Type" asp-action="Index">Types</a>
+                        </li>
+
+                        <!-- Link to Employee page -->
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Employee" asp-action="Index">Employees</a>
+                        </li>
+                        <!-- Link to Employee page -->
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Guest" asp-action="Index">Guests</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
@@ -41,6 +76,7 @@
             &copy; 2025 - HotelReservationSystem - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
