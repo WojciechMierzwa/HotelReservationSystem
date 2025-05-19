@@ -2,12 +2,18 @@ using HotelReservationSystem.Repositories;
 using HotelReservationSystem.Models;
 using Microsoft.EntityFrameworkCore;
 
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Dodaj konfiguracjê po³¹czenia z baz¹ danych
 builder.Services.AddDbContext<ManagerContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("GuestManagerDatabase"))
 );
+//cookies dla trackowania kto jest zalogowane etc...
+builder.Services.AddSession();
+builder.Services.AddDistributedMemoryCache(); 
+//
 var supportedCultures = new[] { "pl-PL" };
 
 builder.Services.Configure<RequestLocalizationOptions>(options =>
@@ -28,7 +34,7 @@ builder.Services.AddScoped<IEmployeeInterface, EmployeeRepository>();
 builder.Services.AddScoped<IRoomInterface, RoomRepository>();
 builder.Services.AddScoped<IReservationRoomInterface, ReservationRoomRepository>();
 builder.Services.AddScoped<IGuestInterface, GuestRepository>();
-
+builder.Services.AddHttpContextAccessor(); //odpowiedzialny za middleware 
 // Dodaj kontrolery z widokami
 builder.Services.AddControllersWithViews();
 
@@ -44,14 +50,17 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseSession();
 
 app.UseAuthorization();
 
-// Mapowanie tras
+
+//USER 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Public}/{action=Index}/{id?}");
 
+//CRUD ADMIN
 app.MapControllerRoute(
     name: "ReservationRoom",
     pattern: "{controller=ReservationRoom}/{action=Index}/{id?}");
@@ -79,5 +88,9 @@ app.MapControllerRoute(
 app.MapControllerRoute(
     name: "type",
     pattern: "{controller=Type}/{action=Index}/{id?}");
+
+app.MapControllerRoute(
+    name: "admin",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

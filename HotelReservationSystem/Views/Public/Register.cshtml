@@ -1,0 +1,30 @@
+﻿@model GuestModel
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<h2>Register</h2>
+
+<form method="post">
+    <label>Login</label>
+    <input name="Login" value="@Model?.Login" />
+
+    <label>Password</label>
+    <input name="Password" value="@Model?.Password" type="password" />
+
+    <label>Name</label>
+    <input name="Name" value="@Model?.Name" />
+
+    <label>Surname</label>
+    <input name="Surname" value="@Model?.Surname" />
+
+    <label>Mail</label>
+    <input name="Mail" value="@Model?.Mail" type="email" />
+
+    <label>Phone</label>
+    <input name="Phone" value="@Model?.Phone" type="tel" />
+
+    <button type="submit">Register</button>
+
+</form>

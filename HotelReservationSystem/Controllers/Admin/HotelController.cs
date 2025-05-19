@@ -2,7 +2,7 @@
 using HotelReservationSystem.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
-namespace HotelReservationSystem.Controllers
+namespace HotelReservationSystem.Controllers.Admin
 {
     public class HotelController : Controller
     {

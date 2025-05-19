@@ -1,0 +1,21 @@
+﻿@model HotelReservationSystem.Models.EmployeeModel
+
+@{
+    ViewData["Title"] = "Profil Pracownika";
+}
+
+<h2>Profil Pracownika</h2>
+
+<div class="card">
+    <div class="card-body">
+        <p><strong>Imię:</strong> @Model.Name</p>
+        <p><strong>Nazwisko:</strong> @Model.Surname</p>
+        <p><strong>Login:</strong> @Model.Login</p>
+        <p><strong>Hotel ID:</strong> @Model.Hotel_Id</p>
+        <p><strong>Rola:</strong> @(Model.IsAdmin ? "Administrator" : "Pracownik")</p>
+    </div>
+</div>
+
+<p class="mt-3">
+    <a asp-action="Logout" class="btn btn-secondary">Wyloguj</a>
+</p>

@@ -3,7 +3,7 @@ using HotelReservationSystem.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace HotelReservationSystem.Controllers
+namespace HotelReservationSystem.Controllers.Admin
 {
     public class EmployeeController : Controller
     {
