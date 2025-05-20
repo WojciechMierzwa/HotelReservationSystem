@@ -1,0 +1,68 @@
+﻿@model HotelReservationSystem.ViewModels.ReservationViewModel
+@{
+    ViewData["Title"] = "Szczegóły rezerwacji";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Szczegóły rezerwacji</h2>
+
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Informacje o rezerwacji</h5>
+        </div>
+        <div class="card-body">
+            @if (Model == null)
+            {
+                <div class="alert alert-danger">Nie znaleziono rezerwacji.</div>
+            }
+            else
+            {
+                <dl class="row">
+                    <dt class="col-sm-3">Gość</dt>
+                    <dd class="col-sm-9">
+                        @(string.IsNullOrWhiteSpace(Model.GuestName) && string.IsNullOrWhiteSpace(Model.GuestSurname)
+                            ? "Brak danych"
+                            : $"{Model.GuestName ?? ""} {Model.GuestSurname ?? ""}".Trim())
+                    </dd>
+
+                    <dt class="col-sm-3">Numer pokoju</dt>
+                    <dd class="col-sm-9">@(Model.RoomNumber ?? "Brak")</dd>
+
+                    <dt class="col-sm-3">Piętro</dt>
+                    <dd class="col-sm-9">@Model.Floor</dd>
+
+                    <dt class="col-sm-3">Liczba łóżek</dt>
+                    <dd class="col-sm-9">@Model.Beds</dd>
+
+                    <dt class="col-sm-3">Data rozpoczęcia</dt>
+                    <dd class="col-sm-9">@(Model.StartDate == default(DateTime) ? "Brak" : Model.StartDate.ToString("dd.MM.yyyy"))</dd>
+
+                    <dt class="col-sm-3">Data zakończenia</dt>
+                    <dd class="col-sm-9">@(Model.EndDate == default(DateTime) ? "Brak" : Model.EndDate.ToString("dd.MM.yyyy"))</dd>
+
+                    <dt class="col-sm-3">Długość pobytu</dt>
+                    <dd class="col-sm-9">
+                        @((Model.EndDate == default(DateTime) || Model.StartDate == default(DateTime) ? 0 : (Model.EndDate - Model.StartDate).Days)) dni
+                    </dd>
+
+                    <dt class="col-sm-3">Koszt całkowity</dt>
+                    <dd class="col-sm-9">@Model.TotalCost.ToString("C2")</dd>
+                </dl>
+
+                <div class="mt-4">
+                    <a asp-action="ManageAllReservations" asp-controller="Book" class="btn btn-secondary">Powrót do listy</a>
+                    @if (Model.ReservationID.HasValue)
+                    {
+                        <a asp-action="Edit" asp-controller="Book" asp-route-id="@Model.ReservationID" class="btn btn-warning">Edytuj</a>
+                        <a asp-action="Cancel" asp-controller="Book" asp-route-id="@Model.ReservationID" class="btn btn-danger">Anuluj rezerwację</a>
+                    }
+                    else
+                    {
+                        <span class="text-danger">Brak ID rezerwacji, edycja i anulowanie niedostępne.</span>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div>

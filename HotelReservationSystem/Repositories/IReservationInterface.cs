@@ -14,5 +14,7 @@ namespace HotelReservationSystem.Repositories
 
         List<ReservationViewModel> GetAllReservationsWithDetails();
 
+        public ReservationViewModel GetDetailed(int id);
+
     }
 }

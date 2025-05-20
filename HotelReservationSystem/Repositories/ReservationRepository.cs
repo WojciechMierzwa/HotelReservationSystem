@@ -55,6 +55,7 @@ namespace HotelReservationSystem.Repositories
                                 select new ReservationViewModel
                                 {
                                     RoomId = r.Id,
+                                    ReservationID = res.Id,
                                     GuestName = g.Name,
                                     GuestSurname = g.Surname,
                                     RoomNumber = r.RoomNumber.ToString(),
@@ -67,7 +68,27 @@ namespace HotelReservationSystem.Repositories
 
             return reservations;
         }
-
+        public ReservationViewModel GetDetailed(int id)
+        {
+            return (from rr in _context.ReservationRooms
+                    join r in _context.Rooms on rr.Room_Id equals r.Id
+                    join res in _context.Reservations on rr.Reservation_Id equals res.Id
+                    join g in _context.Guests on res.Guest_Id equals g.GuestId
+                    where res.Id == id
+                    select new ReservationViewModel
+                    {
+                        RoomId = r.Id,
+                        GuestName = g.Name ?? "Nieznane",
+                        GuestSurname = g.Surname ?? "Nieznane",
+                        RoomNumber = r.RoomNumber.ToString() ?? "Brak",
+                        ReservationID = res.Id,
+                        Floor = r.Floor,
+                        Beds = r.Beds,
+                        TotalCost = res.TotalCost,
+                        StartDate = res.StartDate != default ? res.StartDate : DateTime.Today,
+                        EndDate = res.EndDate != default ? res.EndDate : DateTime.Today
+                    }).FirstOrDefault();
+        }
         public void Delete(int id)
         {
             var reservation = _context.Reservations.SingleOrDefault(r => r.Id == id);
