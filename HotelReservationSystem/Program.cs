@@ -93,4 +93,8 @@ app.MapControllerRoute(
     name: "admin",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+app.MapControllerRoute(
+    name: "book_panel",
+    pattern: "{controller=Book}/{action=Index}/{id?}");
+
 app.Run();

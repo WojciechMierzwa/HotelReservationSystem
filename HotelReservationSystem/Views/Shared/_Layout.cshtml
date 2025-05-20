@@ -1,5 +1,4 @@
 ﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
-
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -7,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>@ViewData["Title"] - HotelReservationSystem</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
 <body>
@@ -19,8 +20,6 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
-
                     <ul class="navbar-nav flex-grow-1">
                         @{
                             var session = HttpContextAccessor.HttpContext.Session;
@@ -28,7 +27,6 @@
                             var isGuest = session.GetInt32("GuestId") != null;
                             var isEmployee = session.GetInt32("EmployeeId") != null;
                         }
-
                         @if (userRole == "Admin")
                         {
                             <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Index">Home</a></li>
@@ -76,19 +74,25 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2025 - HotelReservationSystem
+            © 2025 - HotelReservationSystem
         </div>
     </footer>
 
+    <!-- jQuery -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap JS -->
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+    <!-- Custom JS -->
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 <style>
     /* Stylizacja navbaru */
     .navbar-custom {
-        background: linear-gradient(135deg, #1e3a8a, #3b82f6); /* Głęboki granat do jasnego niebieskiego */
+        background: linear-gradient(135deg, #1e3a8a, #3b82f6);
         border-radius: 0 0 15px 15px;
         box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
         padding: 0.75rem 1rem;
@@ -104,8 +108,8 @@
         }
 
             .navbar-custom .navbar-brand:hover {
-                color: #facc15; /* Żółty akcent dla kontrastu */
-                transform: scale(1.05); /* Subtelne powiększenie */
+                color: #facc15;
+                transform: scale(1.05);
             }
 
         .navbar-custom .nav-link {
@@ -122,17 +126,15 @@
             .navbar-custom .nav-link:hover {
                 background-color: rgba(255, 255, 255, 0.15);
                 color: #ffffff;
-                transform: translateY(-2px); /* Lekkie uniesienie */
+                transform: translateY(-2px);
             }
 
-            /* Efekt podświetlenia dla aktywnego linku */
             .navbar-custom .nav-link.active {
                 background-color: rgba(255, 255, 255, 0.25);
                 color: #ffffff;
                 font-weight: 600;
             }
 
-    /* Stylizacja przycisku togglera */
     .navbar-toggler {
         border: none;
         padding: 0.5rem;
@@ -146,24 +148,7 @@
     }
 
     .navbar-toggler:hover {
-        transform: rotate(90deg); 
-    }
-
-
-    {
-        padding: 0.5rem;
-    }
-
-    .navbar-custom .nav-link {
-        margin: 0.3rem 0;
-        padding: 0.5rem 1rem;
-        text-align: center;
-    }
-
-    .navbar-custom .navbar-brand {
-        font-size: 1.2rem;
-    }
-
+        transform: rotate(90deg);
     }
 </style>
 </html>

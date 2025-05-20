@@ -1,4 +1,5 @@
 ﻿using HotelReservationSystem.Models;
+using HotelReservationSystem.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,6 +43,29 @@ namespace HotelReservationSystem.Repositories
                 existing.Guest_Id = reservation.Guest_Id;
                 _context.SaveChanges();
             }
+        }
+        // Dodaj tę metodę do istniejącej klasy ReservationRepository, która implementuje IReservationInterface
+
+        public List<ReservationViewModel> GetAllReservationsWithDetails()
+        {
+            var reservations = (from rr in _context.ReservationRooms
+                                join r in _context.Rooms on rr.Room_Id equals r.Id
+                                join res in _context.Reservations on rr.Reservation_Id equals res.Id
+                                join g in _context.Guests on res.Guest_Id equals g.GuestId
+                                select new ReservationViewModel
+                                {
+                                    RoomId = r.Id,
+                                    GuestName = g.Name,
+                                    GuestSurname = g.Surname,
+                                    RoomNumber = r.RoomNumber.ToString(),
+                                    Floor = r.Floor,
+                                    Beds = r.Beds,
+                                    TotalCost = res.TotalCost,
+                                    StartDate = res.StartDate,
+                                    EndDate = res.EndDate
+                                }).ToList();
+
+            return reservations;
         }
 
         public void Delete(int id)
