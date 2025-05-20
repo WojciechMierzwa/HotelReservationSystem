@@ -1,5 +1,337 @@
 ﻿@{
-    ViewData["Title"] = "Home";
+    ViewData["Title"] = "Grand Azure Hotel - Your Luxury Escape";
 }
-<h1>Welcome to the Hotel Reservation System</h1>
-<p><a href="/Public/Login">Login</a> | <a href="/Public/Register">Register</a></p>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Arial', sans-serif;
+    }
+
+    body {
+        background-color: #f9f9f9;
+        color: #333;
+    }
+
+    .hero {
+        height: 100vh;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .slider {
+        width: 100%;
+        height: 100%;
+        position: relative;
+    }
+
+    .slide {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        transition: opacity 1s ease-in-out;
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .slide.active {
+            opacity: 1;
+        }
+
+    .slide-1 {
+        background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("/images/1.png") center/cover no-repeat;
+    }
+
+    .slide-2 {
+        background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("/images/2.png") center/cover no-repeat;
+    }
+
+    .slide-3 {
+        background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("/images/3.png") center/cover no-repeat;
+    }
+
+    .slide-content {
+        text-align: center;
+        color: white;
+        max-width: 800px;
+        padding: 20px;
+    }
+
+        .slide-content h2 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.7);
+        }
+
+        .slide-content p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 5px rgba(0,0,0,0.7);
+        }
+
+    .btn {
+        display: inline-block;
+        background-color: #f0b841;
+        color: #1a365d;
+        padding: 12px 30px;
+        border-radius: 30px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: all 0.3s;
+    }
+
+        .btn:hover {
+            background-color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+    .welcome-section {
+        padding: 80px 0;
+        background-color: white;
+    }
+
+    .section-title {
+        text-align: center;
+        margin-bottom: 50px;
+        position: relative;
+        font-size: 36px;
+        color: #1a365d;
+    }
+
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: #f0b841;
+        }
+
+    .welcome-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 40px;
+    }
+
+    .welcome-text {
+        flex: 1;
+    }
+
+        .welcome-text p {
+            margin-bottom: 20px;
+            line-height: 1.8;
+            font-size: 16px;
+        }
+
+    .welcome-img {
+        flex: 1;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+    }
+
+        .welcome-img img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+    .about-section {
+        padding: 80px 0;
+        background-color: #f9f9f9;
+    }
+
+    .about-content {
+        text-align: center;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+        .about-content p {
+            margin-bottom: 20px;
+            line-height: 1.8;
+            font-size: 16px;
+        }
+
+    .features {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top: 40px;
+        gap: 30px;
+    }
+
+    .feature {
+        background-color: white;
+        border-radius: 10px;
+        padding: 30px;
+        flex: 0 0 calc(33.333% - 20px);
+        text-align: center;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        transition: transform 0.3s;
+    }
+
+        .feature:hover {
+            transform: translateY(-10px);
+        }
+
+    .feature-icon {
+        font-size: 48px;
+        margin-bottom: 20px;
+        color: #f0b841;
+    }
+
+    .feature h3 {
+        margin-bottom: 15px;
+        color: #1a365d;
+    }
+
+    .auth-links {
+        position: absolute;
+        top: 20px;
+        right: 30px;
+        z-index: 1000;
+        background: rgba(26, 54, 93, 0.8);
+        padding: 10px 20px;
+        border-radius: 30px;
+    }
+
+        .auth-links a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: bold;
+        }
+
+            .auth-links a:hover {
+                color: #f0b841;
+            }
+
+    .container {
+        width: 90%;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    @@media (max-width: 768px) {
+        .welcome-content {
+            flex-direction: column;
+        }
+
+        .slide-content h2 {
+            font-size: 36px;
+        }
+
+        .feature {
+            flex: 0 0 100%;
+        }
+    }
+</style>
+
+
+<!-- Hero Section with Slider -->
+<section class="hero">
+    <div class="slider">
+        <div class="slide slide-1 active">
+            <div class="slide-content">
+                <h2>Experience Luxury Redefined</h2>
+                <p>Indulge in our world-class amenities and unparalleled service at Grand Azure Hotel.</p>
+                <a asp-area="" asp-controller="Rooms" asp-action="Index" class="btn">Explore Rooms</a>
+            </div>
+        </div>
+        <div class="slide slide-2">
+            <div class="slide-content">
+                <h2>Culinary Excellence</h2>
+                <p>Savor exquisite dining experiences created by our award-winning chefs.</p>
+                <a asp-area="" asp-controller="Dining" asp-action="Index" class="btn">View Restaurants</a>
+            </div>
+        </div>
+        <div class="slide slide-3">
+            <div class="slide-content">
+                <h2>Unforgettable Events</h2>
+                <p>Create lasting memories with our exceptional event spaces and planning services.</p>
+                <a asp-area="" asp-controller="Events" asp-action="Index" class="btn">Plan Your Event</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Welcome Section -->
+<section class="welcome-section">
+    <div class="container">
+        <h2 class="section-title">Welcome to Grand Azure</h2>
+        <div class="welcome-content">
+            <div class="welcome-text">
+                <p>Welcome to Grand Azure Hotel, where luxury meets comfort and excellence is our standard. Nestled in a prime location, our hotel offers a serene retreat for travelers seeking both relaxation and adventure.</p>
+                <p>From the moment you step into our elegant lobby, you'll be embraced by our signature hospitality and attention to detail that sets us apart. Our dedicated staff is committed to making your stay memorable, catering to your every need with genuine warmth and professionalism.</p>
+                <a asp-area="" asp-controller="Home" asp-action="About" class="btn">Learn More</a>
+            </div>
+            <div class="welcome-img">
+                <img src="/Images/hotel.png" alt="Grand Azure Hotel Lobby">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- About Us Section -->
+<section class="about-section">
+    <div class="container">
+        <h2 class="section-title">Who We Are</h2>
+        <div class="about-content">
+            <p>Grand Azure Hotel represents the pinnacle of luxury hospitality, built on a foundation of excellence and a passion for creating extraordinary experiences. For over two decades, we have been welcoming guests from around the world, earning a reputation for exceptional service and sophisticated accommodations.</p>
+            <p>Our philosophy is simple: every detail matters. From the architectural design to the personalized service you receive, we strive for perfection in all aspects of your stay. We believe that luxury is not just about opulence, but about creating meaningful connections and unforgettable moments.</p>
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">⭐</div>
+                    <h3>Exceptional Service</h3>
+                    <p>Our staff is trained to anticipate your needs and exceed your expectations at every turn.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🍽️</div>
+                    <h3>Fine Dining</h3>
+                    <p>Experience culinary excellence with our selection of restaurants and dining options.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🏊</div>
+                    <h3>Premium Amenities</h3>
+                    <p>Enjoy our state-of-the-art facilities designed for your comfort and enjoyment.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        // Image slider functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            let currentSlide = 0;
+            const slides = document.querySelectorAll('.slide');
+
+            function showSlide(index) {
+                slides.forEach(slide => slide.classList.remove('active'));
+                slides[index].classList.add('active');
+            }
+
+            function nextSlide() {
+                currentSlide = (currentSlide + 1) % slides.length;
+                showSlide(currentSlide);
+            }
+
+            // Change slide every 5 seconds
+            setInterval(nextSlide, 5000);
+        });
+    </script>
+}

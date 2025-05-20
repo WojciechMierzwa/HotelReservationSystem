@@ -1,0 +1,105 @@
+﻿@model HotelReservationSystem.ViewModels.GuestDetailsViewModel
+
+@{
+    ViewData["Title"] = "Szczegóły gościa";
+}
+
+<h1>Szczegóły gościa</h1>
+
+@if (!Model.SelectedRooms.Any())
+{
+    <div class="alert alert-warning">Brak wybranych pokoi. Proszę wrócić i wybrać pokoje.</div>
+}
+else
+{
+    <form method="post" asp-action="ConfirmReservation" class="mb-4">
+
+        <div class="mb-3">
+            <label>Wybrane pokoje:</label>
+            <ul>
+                @foreach (var room in Model.SelectedRooms)
+                {
+                    <li data-base-cost="@room.Type.BaseCost.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)"
+                        data-high-cost="@room.Type.HighSeasonCost.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)">
+                        Pokój nr: @room.RoomNumber (Typ: @room.Type?.Name, Cena bazowa: @room.Type?.BaseCost.ToString("C"))
+                        <a asp-action="RemoveRoomFromReservation" asp-route-id="@room.Id" class="btn btn-danger btn-sm ms-2">Usuń</a>
+                    </li>
+                }
+            </ul>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="DateFrom" class="form-label">Data od:</label>
+                <input asp-for="DateFrom" type="date" class="form-control" required />
+            </div>
+            <div class="col-md-6">
+                <label for="DateTo" class="form-label">Data do:</label>
+                <input asp-for="DateTo" type="date" class="form-control" required />
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label>Koszt całkowity:</label>
+            <div id="totalCost">@Model.TotalCost?.ToString("C") ?? "Wybierz daty"</div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Potwierdź rezerwację</button>
+        <a asp-action="Reserve" class="btn btn-secondary ms-2">Powrót</a>
+    </form>
+}
+
+@section Scripts {
+    <script>
+        const dateFrom = document.querySelector('input[name="DateFrom"]');
+        const dateTo = document.querySelector('input[name="DateTo"]');
+        const totalCostDiv = document.getElementById('totalCost');
+
+        function calculateCost() {
+            if (!dateFrom.value || !dateTo.value) {
+                totalCostDiv.textContent = "Wybierz daty";
+                return;
+            }
+
+            const fromDate = new Date(dateFrom.value);
+            const toDate = new Date(dateTo.value);
+
+            if (toDate <= fromDate) {
+                totalCostDiv.textContent = "Data do musi być po dacie od";
+                return;
+            }
+
+            // Sezon wysoki
+            const year = fromDate.getFullYear();
+            const highSeasonStart = new Date(year, 6, 1);   // 1 czerwiec
+            const highSeasonEnd = new Date(year, 7, 30);    // 30 sierpnia
+
+            let highSeasonDays = 0;
+            let normalDays = 0;
+
+            for (let d = new Date(fromDate); d < toDate; d.setDate(d.getDate() + 1)) {
+                if (d >= highSeasonStart && d <= highSeasonEnd) {
+                    highSeasonDays++;
+                } else {
+                    normalDays++;
+                }
+            }
+
+            const rooms = document.querySelectorAll('ul li');
+            let total = 0;
+
+            rooms.forEach(li => {
+                const baseCost = parseFloat(li.getAttribute('data-base-cost'));
+                const highCost = parseFloat(li.getAttribute('data-high-cost'));
+                if (!isNaN(baseCost) && !isNaN(highCost)) {
+                    total += baseCost * normalDays + highCost * highSeasonDays;
+                }
+            });
+
+            totalCostDiv.textContent = total.toLocaleString('pl-PL', { style: 'currency', currency: 'PLN' });
+        }
+
+        dateFrom.addEventListener('change', calculateCost);
+        dateTo.addEventListener('change', calculateCost);
+    </script>
+}

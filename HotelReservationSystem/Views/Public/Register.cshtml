@@ -4,27 +4,105 @@
     ViewData["Title"] = "Register";
 }
 
-<h2>Register</h2>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <h2 class="text-center mb-4">Register</h2>
+            <form method="post" class="p-4 bg-light rounded shadow-sm">
+                <div class="mb-3">
+                    <label for="login" class="form-label">Login</label>
+                    <input type="text" name="Login" id="login" value="@Model?.Login" class="form-control" placeholder="Enter your login" required />
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" name="Password" id="password" value="@Model?.Password" class="form-control" placeholder="Enter your password" required />
+                </div>
+                <div class="mb-3">
+                    <label for="name" class="form-label">Name</label>
+                    <input type="text" name="Name" id="name" value="@Model?.Name" class="form-control" placeholder="Enter your name" required />
+                </div>
+                <div class="mb-3">
+                    <label for="surname" class="form-label">Surname</label>
+                    <input type="text" name="Surname" id="surname" value="@Model?.Surname" class="form-control" placeholder="Enter your surname" required />
+                </div>
+                <div class="mb-3">
+                    <label for="mail" class="form-label">Email</label>
+                    <input type="email" name="Mail" id="mail" value="@Model?.Mail" class="form-control" placeholder="Enter your email" required />
+                </div>
+                <div class="mb-3">
+                    <label for="phone" class="form-label">Phone</label>
+                    <input type="tel" name="Phone" id="phone" value="@Model?.Phone" class="form-control" placeholder="Enter your phone number" />
+                </div>
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary btn-block">Register</button>
+                </div>
+                @if (ViewBag.Error != null)
+                {
+                    <p class="text-danger mt-3 mb-0 text-center">@ViewBag.Error</p>
+                }
+            </form>
+            <div class="text-center mt-3">
+                <p>Already have an account? <a href="@Url.Action("Login", "Public")" class="text-primary">Login</a></p>
+                <p>Employee? <a href="@Url.Action("LoginEmployee", "Public")" class="text-primary">Login as Employee</a></p>
+            </div>
+        </div>
+    </div>
+</div>
 
-<form method="post">
-    <label>Login</label>
-    <input name="Login" value="@Model?.Login" />
+<style>
+    /* Stylizacja formularza */
+    .form-control {
+        border-radius: 8px;
+        border: 1px solid #ced4da;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
 
-    <label>Password</label>
-    <input name="Password" value="@Model?.Password" type="password" />
+        .form-control:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 8px rgba(59, 130, 246, 0.5);
+        }
 
-    <label>Name</label>
-    <input name="Name" value="@Model?.Name" />
+    .btn-primary {
+        background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+        border: none;
+        border-radius: 8px;
+        padding: 0.75rem;
+        font-weight: 500;
+        transition: transform 0.3s ease, background 0.3s ease;
+    }
 
-    <label>Surname</label>
-    <input name="Surname" value="@Model?.Surname" />
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #3b82f6, #1e3a8a);
+            transform: translateY(-2px);
+        }
 
-    <label>Mail</label>
-    <input name="Mail" value="@Model?.Mail" type="email" />
+    .form-label {
+        font-weight: 500;
+        color: #1e3a8a;
+    }
 
-    <label>Phone</label>
-    <input name="Phone" value="@Model?.Phone" type="tel" />
+    .bg-light {
+        background-color: #f8f9fa !important;
+        border-radius: 12px;
+    }
 
-    <button type="submit">Register</button>
+    .text-primary {
+        color: #3b82f6 !important;
+        transition: color 0.3s ease;
+    }
 
-</form>
+        .text-primary:hover {
+            color: #1e3a8a !important;
+        }
+
+
+    {
+        padding: 1.5rem !important;
+    }
+
+    .btn-primary {
+        padding: 0.6rem;
+    }
+
+    }
+</style>
