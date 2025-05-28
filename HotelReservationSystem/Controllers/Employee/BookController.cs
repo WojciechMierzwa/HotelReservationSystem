@@ -76,13 +76,34 @@ namespace HotelReservationSystem.Controllers.Employee
             return View(viewModel);
         }
 
+        [HttpGet]
         public IActionResult Delete(int id)
         {
-            var item = _reservationRepo.Get(id);
-            if (item == null)
+            var reservation = _reservationRepo.GetDetailed(id);
+            if (reservation == null)
+            {
                 return NotFound();
-            return View(item);
+            }
+            return View(reservation);
         }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteConfirmed(int id)
+        {
+            try
+            {
+                _reservationRepo.Delete(id);
+                return RedirectToAction(nameof(ManageAllReservations));
+            }
+            catch (Exception ex)
+            {
+              
+                TempData["ErrorMessage"] = $"An error occurred while deleting the reservation: {ex.Message}";
+                return RedirectToAction(nameof(Delete), new { id });
+            }
+        }
+
 
         public IActionResult CheckIn()
         {
