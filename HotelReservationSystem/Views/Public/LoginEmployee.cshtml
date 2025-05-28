@@ -1,0 +1,99 @@
+﻿@{
+    ViewData["Title"] = "Logowanie Pracownika";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+            <h2 class="text-center mb-4">Logowanie Pracownika</h2>
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    @ViewBag.Error
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+            <form asp-action="LoginEmployee" method="post" class="p-4 bg-light rounded shadow-sm">
+                <div class="mb-3">
+                    <label for="username" class="form-label">Login</label>
+                    <input type="text" name="username" id="username" class="form-control" placeholder="Enter your login" required />
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Hasło</label>
+                    <input type="password" name="password" id="password" class="form-control" placeholder="Enter your password" required />
+                </div>
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary btn-block">Zaloguj się</button>
+                </div>
+            </form>
+            <div class="text-center mt-3">
+                <p>Not an employee? <a href="@Url.Action("Login", "Public")" class="text-primary">Login as Guest</a></p>
+                <p>Need an account? <a href="@Url.Action("Register", "Public")" class="text-primary">Register</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Stylizacja formularza */
+    .form-control {
+        border-radius: 8px;
+        border: 1px solid #ced4da;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .form-control:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 8px rgba(59, 130, 246, 0.5);
+        }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+        border: none;
+        border-radius: 8px;
+        padding: 0.75rem;
+        font-weight: 500;
+        transition: transform 0.3s ease, background 0.3s ease;
+    }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #3b82f6, #1e3a8a);
+            transform: translateY(-2px);
+        }
+
+    .form-label {
+        font-weight: 500;
+        color: #1e3a8a;
+    }
+
+    .bg-light {
+        background-color: #f8f9fa !important;
+        border-radius: 12px;
+    }
+
+    .text-primary {
+        color: #3b82f6 !important;
+        transition: color 0.3s ease;
+    }
+
+        .text-primary:hover {
+            color: #1e3a8a !important;
+        }
+
+    .alert-danger {
+        border-radius: 8px;
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+
+    .alert-dismissible .btn-close {
+        filter: invert(0.5);
+    }
+
+
+    .btn-primary {
+        padding: 0.6rem;
+    }
+
+    }
+</style>

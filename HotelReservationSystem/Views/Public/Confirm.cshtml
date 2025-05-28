@@ -1,0 +1,20 @@
+﻿@{
+    ViewData["Title"] = "Potwierdzenie rezerwacji";
+}
+
+<h2>Potwierdzenie rezerwacji</h2>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Success"]
+    </div>
+}
+else
+{
+    <div class="alert alert-info">
+        Rezerwacja została przetworzona.
+    </div>
+}
+
+<a asp-action="Index" asp-controller="Public" class="btn btn-primary">Powrót do strony głównej</a>

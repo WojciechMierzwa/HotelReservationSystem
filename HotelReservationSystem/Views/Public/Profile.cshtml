@@ -1,0 +1,130 @@
+﻿@model HotelReservationSystem.Models.GuestModel
+
+@{
+    ViewData["Title"] = "My Profile";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <h2 class="text-center mb-4">My Profile</h2>
+            @if (Model != null)
+            {
+                <div class="card shadow-sm">
+                    <div class="card-body p-4">
+                        <h5 class="card-title text-center mb-4">User Information</h5>
+                        <div class="row mb-3">
+                            <div class="col-4 fw-bold text-primary">Login:</div>
+                            <div class="col-8">@Model.Login</div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-4 fw-bold text-primary">Full Name:</div>
+                            <div class="col-8">@Model.FullName</div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-4 fw-bold text-primary">Email:</div>
+                            <div class="col-8">@Model.Mail</div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-4 fw-bold text-primary">Phone:</div>
+                            <div class="col-8">@(Model.Phone ?? "Not provided")</div>
+                        </div>
+                        <div class="text-center mt-4">
+                            <a href="@Url.Action("Logout", "Public")" class="btn btn-outline-primary">Logout</a>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    User not found or not logged in.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <div class="text-center">
+                    <a href="@Url.Action("Login", "Public")" class="btn btn-primary">Login</a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Stylizacja karty profilu */
+    .card {
+        border: none;
+        border-radius: 12px;
+        background-color: #f8f9fa;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-title {
+        color: #1e3a8a;
+        font-weight: 600;
+    }
+
+    .fw-bold.text-primary {
+        color: #3b82f6 !important;
+    }
+
+    .row.mb-3 {
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #e9ecef;
+    }
+
+        .row.mb-3:last-child {
+            border-bottom: none;
+        }
+
+    /* Stylizacja przycisków */
+    .btn-primary {
+        background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+        border: none;
+        border-radius: 8px;
+        padding: 0.75rem 1.5rem;
+        font-weight: 500;
+        transition: transform 0.3s ease, background 0.3s ease;
+    }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #3b82f6, #1e3a8a);
+            transform: translateY(-2px);
+        }
+
+    .btn-outline-primary {
+        border-color: #3b82f6;
+        color: #3b82f6;
+        border-radius: 8px;
+        padding: 0.75rem 1.5rem;
+        font-weight: 500;
+        transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+    }
+
+        .btn-outline-primary:hover {
+            background-color: #3b82f6;
+            color: #ffffff;
+            transform: translateY(-2px);
+        }
+
+    /* Stylizacja alertu */
+    .alert-warning {
+        border-radius: 8px;
+        background-color: #fff3cd;
+        color: #664d03;
+    }
+
+    .alert-dismissible .btn-close {
+        filter: invert(0.5);
+    }
+
+
+    .btn-primary, .btn-outline-primary {
+        padding: 0.6rem 1rem;
+    }
+
+    .row.mb-3 {
+        font-size: 0.9rem;
+    }
+
+    }
+</style>

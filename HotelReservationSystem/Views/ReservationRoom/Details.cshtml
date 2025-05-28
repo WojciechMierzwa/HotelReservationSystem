@@ -1,0 +1,34 @@
+﻿@model HotelReservationSystem.Models.ReservationRoomModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Reservation-Room Details</h1>
+
+<div>
+    <h4>ReservationRoomModel</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3">Reservation ID</dt>
+        <dd class="col-sm-9">@Model.Reservation?.Id</dd>
+
+        <dt class="col-sm-3">Reservation Dates</dt>
+        <dd class="col-sm-9">
+            @Model.Reservation?.StartDate.ToShortDateString()
+            -
+            @Model.Reservation?.EndDate.ToShortDateString()
+        </dd>
+
+        <dt class="col-sm-3">Room Number</dt>
+        <dd class="col-sm-9">@Model.Room?.RoomNumber</dd>
+
+        <dt class="col-sm-3">Room Status</dt>
+        <dd class="col-sm-9">@Model.Room?.Status</dd>
+    </dl>
+</div>
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>

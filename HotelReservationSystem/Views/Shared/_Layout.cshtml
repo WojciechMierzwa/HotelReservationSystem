@@ -1,0 +1,154 @@
+﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] - HotelReservationSystem</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-custom mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-controller="Public" asp-action="Index">Hotel Reservation System</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        @{
+                            var session = HttpContextAccessor.HttpContext.Session;
+                            var userRole = session.GetString("UserRole");
+                            var isGuest = session.GetInt32("GuestId") != null;
+                            var isEmployee = session.GetInt32("EmployeeId") != null;
+                        }
+                        @if (userRole == "Admin")
+                        {
+                            <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Index">Home</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-controller="Reservation" asp-action="Index">Reservations</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-controller="Room" asp-action="Index">Rooms</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-controller="ReservationRoom" asp-action="Index">Reservation Rooms</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-controller="Hotel" asp-action="Index">Hotels</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-controller="Type" asp-action="Index">Types</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-controller="Employee" asp-action="Index">Employees</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-controller="Guest" asp-action="Index">Guests</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-controller="Public" asp-action="Logout">Logout</a></li>
+                        }
+                        else if (userRole == "Employee")
+                        {
+                            <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Index">Home</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-controller="Reservation" asp-action="Index">Reservations</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-controller="Room" asp-action="Index">Rooms</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-controller="ReservationRoom" asp-action="Index">Reservation Rooms</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-controller="Public" asp-action="Logout">Logout</a></li>
+                        }
+                        else if (isGuest)
+                        {
+                            <li class="nav-item"><a class="nav-link" asp-controller="Public" asp-action="Index">Home</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-controller="Public" asp-action="Profile">Profile</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-controller="Public" asp-action="Logout">Logout</a></li>
+                        }
+                        else
+                        {
+                            <li class="nav-item"><a class="nav-link" asp-controller="Public" asp-action="Index">Home</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-controller="Public" asp-action="Login">Login</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-controller="Public" asp-action="Register">Register</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-controller="Public" asp-action="LoginEmployee">Login as Employee</a></li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            © 2025 - HotelReservationSystem
+        </div>
+    </footer>
+
+    <!-- jQuery -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+    <!-- Custom JS -->
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+<style>
+    /* Stylizacja navbaru */
+    .navbar-custom {
+        background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+        border-radius: 0 0 15px 15px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        padding: 0.75rem 1rem;
+        transition: all 0.3s ease-in-out;
+    }
+
+        .navbar-custom .navbar-brand {
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 1.5rem;
+            letter-spacing: 0.5px;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+            .navbar-custom .navbar-brand:hover {
+                color: #facc15;
+                transform: scale(1.05);
+            }
+
+        .navbar-custom .nav-link {
+            color: #e5e7eb;
+            font-weight: 500;
+            margin: 0 0.75rem;
+            padding: 0.5rem 1.2rem;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .navbar-custom .nav-link:hover {
+                background-color: rgba(255, 255, 255, 0.15);
+                color: #ffffff;
+                transform: translateY(-2px);
+            }
+
+            .navbar-custom .nav-link.active {
+                background-color: rgba(255, 255, 255, 0.25);
+                color: #ffffff;
+                font-weight: 600;
+            }
+
+    .navbar-toggler {
+        border: none;
+        padding: 0.5rem;
+        transition: all 0.3s ease;
+    }
+
+    .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba(255, 255, 255, 0.9)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+        width: 1.5em;
+        height: 1.5em;
+    }
+
+    .navbar-toggler:hover {
+        transform: rotate(90deg);
+    }
+</style>
+</html>

@@ -1,0 +1,50 @@
+﻿@{
+    ViewBag.Title = "Employee Panel";
+}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+<div class="container mt-5">
+    <h2 class="mb-4">Employee Panel</h2>
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+        <div class="col">
+            <div class="card text-white bg-primary h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Check-In</h5>
+                    <p class="card-text">Go to check-in page.</p>
+                    <a href="@Url.Action("CheckIn")" class="btn btn-light">Go</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card text-white bg-success h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Check-Out</h5>
+                    <p class="card-text">Go to check-out page.</p>
+                    <a href="@Url.Action("CheckOut")" class="btn btn-light">Go</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card text-white bg-warning h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Phone Reservation</h5>
+                    <p class="card-text">Manage phone reservations.</p>
+                    <a href="@Url.Action("PhoneReservation")" class="btn btn-dark">Go</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card text-white bg-danger h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Manage All Reservations</h5>
+                    <p class="card-text">View and manage all reservations.</p>
+                    <a href="@Url.Action("ManageAllReservations")" class="btn btn-light">Go</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

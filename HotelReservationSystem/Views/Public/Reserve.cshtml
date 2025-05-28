@@ -1,0 +1,103 @@
+﻿@model HotelReservationSystem.ViewModels.RoomFilterViewModel
+
+@{
+    ViewData["Title"] = "Rezerwacja pokoi";
+}
+
+<h1 class="mb-4">Dostępne pokoje</h1>
+
+<form method="get" class="mb-4 row g-3">
+    <div class="col-md-3">
+        <label for="beds" class="form-label">Liczba łóżek</label>
+        <input type="number" class="form-control" name="beds" value="@Model.Beds" />
+    </div>
+
+    <div class="col-md-3">
+        <label for="typeId" class="form-label">Typ pokoju</label>
+        <select class="form-select" name="typeId">
+            <option value="">-- Wszystkie --</option>
+            @foreach (var type in Model.Types)
+            {
+                <option value="@type.Id" selected="@(type.Id == Model.TypeId ? "selected" : null)">
+                    @type.Name
+                </option>
+            }
+        </select>
+    </div>
+
+    <div class="col-md-3">
+        <label for="hotelId" class="form-label">Lokalizacja (hotel)</label>
+        <select class="form-select" name="hotelId">
+            <option value="">-- Wszystkie --</option>
+            @foreach (var hotel in Model.Hotels)
+            {
+                <option value="@hotel.Id" selected="@(hotel.Id == Model.HotelId ? "selected" : null)">
+                    @hotel.City
+                </option>
+            }
+        </select>
+    </div>
+
+    <div class="col-md-3 d-flex align-items-end gap-2">
+        <button type="submit" class="btn btn-primary w-50">Filtruj</button>
+        <a href="@Url.Action("EnterGuestDetails", "Public")" class="btn btn-secondary w-50">Dalej</a>
+    </div>
+</form>
+
+@if (!Model.Rooms.Any())
+{
+    <div class="alert alert-info">Brak dostępnych pokoi dla wybranych filtrów.</div>
+}
+else
+{
+    <table class="table table-bordered table-striped">
+        <thead class="table-light">
+            <tr>
+                <th>Piętro</th>
+                <th>Klimatyzacja</th>
+                <th>Łóżka</th>
+                <th>Numer pokoju</th>
+                <th>Typ</th>
+                <th>Hotel</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var room in Model.Rooms)
+            {
+                <tr>
+                    <td>@room.Floor</td>
+                    <td>@(room.AirConditioned ? "Tak" : "Nie")</td>
+                    <td>@room.Beds</td>
+                    <td>@room.RoomNumber</td>
+                    <td>@room.Type?.Name</td>
+                    <td>@room.Hotel?.City</td>
+                    <td>
+                        <button class="btn btn-success btn-sm btn-reserve" data-room-id="@room.Id">Rezerwuj</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
+@section Scripts {
+    <script>
+        document.querySelectorAll('.btn-reserve').forEach(button => {
+            button.addEventListener('click', function() {
+                const roomId = this.getAttribute('data-room-id');
+                fetch(`@Url.Action("AddRoomToReservation", "Public")?id=${roomId}`)
+                    .then(response => {
+                        if (response.ok) {
+                            const row = this.closest('tr');
+                            if(row) row.remove();
+                        } else {
+                            alert('Nie udało się dodać pokoju do rezerwacji.');
+                        }
+                    })
+                    .catch(() => alert('Błąd podczas komunikacji z serwerem.'));
+            });
+        });
+    </script>
+}
+

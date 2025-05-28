@@ -1,0 +1,88 @@
+﻿@model HotelReservationSystem.Models.EmployeeModel
+
+@{
+    ViewData["Title"] = "Profil Pracownika";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <h2 class="text-center mb-4">Profil Pracownika</h2>
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <h5 class="card-title text-center mb-4">Informacje o Pracowniku</h5>
+                    <div class="row mb-3">
+                        <div class="col-4 fw-bold text-primary">Imię:</div>
+                        <div class="col-8">@Model.Name</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-4 fw-bold text-primary">Nazwisko:</div>
+                        <div class="col-8">@Model.Surname</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-4 fw-bold text-primary">Login:</div>
+                        <div class="col-8">@Model.Login</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-4 fw-bold text-primary">Hotel ID:</div>
+                        <div class="col-8">@Model.Hotel_Id</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-4 fw-bold text-primary">Rola:</div>
+                        <div class="col-8">@(Model.IsAdmin ? "Administrator" : "Pracownik")</div>
+                    </div>
+                    <div class="text-center mt-4">
+                        <a href="@Url.Action("Logout", "Public")" class="btn btn-outline-primary">Wyloguj się</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Stylizacja karty profilu */
+    .card {
+        border: none;
+        border-radius: 12px;
+        background-color: #f8f9fa;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-title {
+        color: #1e3a8a;
+        font-weight: 600;
+    }
+
+    .fw-bold.text-primary {
+        color: #3b82f6 !important;
+    }
+
+    .row.mb-3 {
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #e9ecef;
+    }
+
+        .row.mb-3:last-child {
+            border-bottom: none;
+        }
+
+    /* Stylizacja przycisku */
+    .btn-outline-primary {
+        border-color: #3b82f6;
+        color: #3b82f6;
+        border-radius: 8px;
+        padding: 0.75rem 1.5rem;
+        font-weight: 500;
+        transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+    }
+
+        .btn-outline-primary:hover {
+            background-color: #3b82f6;
+            color: #ffffff;
+            transform: translateY(-2px);
+        }
+
+    
+
+    }</style>

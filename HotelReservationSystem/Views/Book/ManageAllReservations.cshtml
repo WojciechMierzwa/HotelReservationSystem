@@ -1,0 +1,179 @@
+﻿@model IEnumerable<HotelReservationSystem.ViewModels.ReservationViewModel>
+@{
+    ViewData["Title"] = "Zarządzanie rezerwacjami";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Wszystkie rezerwacje</h2>
+
+    <div class="card shadow mb-4">
+        <div class="card-header bg-secondary text-white">
+            <h5 class="mb-0">Filtrowanie rezerwacji</h5>
+        </div>
+        <div class="card-body">
+            <form id="filterForm" class="row g-3">
+                <div class="col-md-3">
+                    <label for="guestFilter" class="form-label">Imię/Nazwisko gościa</label>
+                    <input type="text" class="form-control" id="guestFilter" placeholder="Wpisz imię lub nazwisko">
+                </div>
+                <div class="col-md-3">
+                    <label for="startDateFilter" class="form-label">Data przyjazdu od</label>
+                    <input type="date" class="form-control" id="startDateFilter">
+                </div>
+                <div class="col-md-3">
+                    <label for="endDateFilter" class="form-label">Data przyjazdu do</label>
+                    <input type="date" class="form-control" id="endDateFilter">
+                </div>
+                <div class="col-md-3 d-flex align-items-end">
+                    <div>
+                        <button type="button" id="applyFilters" class="btn btn-primary me-2">Filtruj</button>
+                        <button type="button" id="resetFilters" class="btn btn-outline-secondary">Resetuj</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Lista rezerwacji</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                @if (!Model.Any())
+                {
+                    <div class="alert alert-info">Brak rezerwacji do wyświetlenia.</div>
+                }
+                else
+                {
+                    <table class="table table-striped table-hover" id="reservationsTable">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Gość</th>
+                                <th>Numer pokoju</th>
+                                <th>Piętro</th>
+                                <th>Liczba łóżek</th>
+                                <th>Data rozpoczęcia</th>
+                                <th>Data zakończenia</th>
+                                <th>Długość pobytu (dni)</th>
+                                <th>Koszt całkowity</th>
+                                <th>Akcje</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @(string.IsNullOrWhiteSpace(item.GuestName) && string.IsNullOrWhiteSpace(item.GuestSurname)
+                                            ? "Brak danych"
+                                            : $"{item.GuestName ?? ""} {item.GuestSurname ?? ""}".Trim())
+                                    </td>
+                                    <td>@(item.RoomNumber ?? "Brak")</td>
+                                    <td>@item.Floor</td>
+                                    <td>@item.Beds</td>
+                                    <td>@(item.StartDate == default(DateTime) ? "Brak" : item.StartDate.ToString("dd.MM.yyyy"))</td>
+                                    <td>@(item.EndDate == default(DateTime) ? "Brak" : item.EndDate.ToString("dd.MM.yyyy"))</td>
+                                    <td>@((item.EndDate == default(DateTime) || item.StartDate == default(DateTime) ? 0 : (item.EndDate - item.StartDate).Days))</td>
+                                    <td>@item.TotalCost.ToString("C2")</td>
+                                    <td>
+                                        <div class="btn-group">
+                                            @if (item.ReservationID.HasValue)
+                                            {
+                                                <a asp-action="ReservationDetails" asp-controller="Book" asp-route-id="@item.ReservationID" class="btn btn-sm btn-outline-info">Szczegóły</a>
+                                                <a asp-action="Edit" asp-controller="Book" asp-route-id="@item.ReservationID" class="btn btn-sm btn-outline-warning">Edytuj</a>
+                                                <a asp-action="Cancel" asp-controller="Book" asp-route-id="@item.ReservationID" class="btn btn-sm btn-outline-danger">Anuluj</a>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-danger">Brak ID rezerwacji</span>
+                                            }
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            if (!$.fn.DataTable) {
+                console.error("DataTables nie jest załadowane. Sprawdź, czy skrypty są poprawnie dołączone.");
+                return;
+            }
+
+            var table = $('#reservationsTable').DataTable({
+                "language": {
+                    "url": "https://cdn.datatables.net/plug-ins/1.13.4/i18n/pl.json"
+                },
+                "responsive": true,
+                "order": [[4, "asc"]]
+            });
+
+            $("#guestFilter").on("keyup", function() {
+                var value = this.value.toLowerCase().trim();
+                table.column(0).search(value, true, false).draw();
+            });
+
+            $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+                var startDateFilter = $("#startDateFilter").val();
+                var endDateFilter = $("#endDateFilter").val();
+
+                if (!startDateFilter && !endDateFilter) {
+                    return true;
+                }
+
+                var dateParts = data[4].split('.');
+                if (data[4] === "Brak" || dateParts.length !== 3) {
+                    console.warn("Nieprawidłowy format daty lub brak daty w wierszu:", data[4]);
+                    return false;
+                }
+
+                var rowDate = new Date(dateParts[2], dateParts[1] - 1, dateParts[0]);
+                if (isNaN(rowDate)) {
+                    console.warn("Nie można sparsować daty:", data[4]);
+                    return false;
+                }
+
+                var startDate = startDateFilter ? new Date(startDateFilter) : null;
+                var endDate = endDateFilter ? new Date(endDateFilter) : null;
+
+                if (startDate && !endDate) {
+                    return rowDate >= startDate;
+                } else if (!startDate && endDate) {
+                    return rowDate <= endDate;
+                } else if (startDate && endDate) {
+                    return rowDate >= startDate && rowDate <= endDate;
+                }
+
+                return true;
+            });
+
+            $("#applyFilters").on("click", function() {
+                var startDateFilter = $("#startDateFilter").val();
+                var endDateFilter = $("#endDateFilter").val();
+
+                if (startDateFilter && endDateFilter && new Date(startDateFilter) > new Date(endDateFilter)) {
+                    alert("Data początkowa nie może być późniejsza niż data końcowa!");
+                    return;
+                }
+                table.draw();
+            });
+
+            $("#resetFilters").on("click", function() {
+                $("#filterForm")[0].reset();
+                $("#guestFilter").val('');
+                $("#startDateFilter").val('');
+                $("#endDateFilter").val('');
+                table.column(0).search('').draw();
+            });
+        });
+    </script>
+}
