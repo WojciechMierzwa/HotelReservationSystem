@@ -14,6 +14,8 @@ namespace HotelReservationSystem.Repositories
 
         List<ReservationViewModel> GetAllReservationsWithDetails(); //ReservationviewModel
 
+        List<ReservationViewModel> GetAllReservationsWithDetailsOfUser(int id);
+
         public ReservationViewModel GetDetailed(int id); // //ReservationviewModel
 
         public void Update2(int id, ReservationViewModel viewModel);

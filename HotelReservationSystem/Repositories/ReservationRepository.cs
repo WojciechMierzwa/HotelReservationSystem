@@ -69,6 +69,31 @@ namespace HotelReservationSystem.Repositories
 
             return reservations;
         }
+
+        public List<ReservationViewModel> GetAllReservationsWithDetailsOfUser(int guestId)
+        {
+            var reservations = (from rr in _context.ReservationRooms
+                                join r in _context.Rooms on rr.Room_Id equals r.Id
+                                join res in _context.Reservations on rr.Reservation_Id equals res.Id
+                                join g in _context.Guests on res.Guest_Id equals g.GuestId
+                                where g.GuestId == guestId
+                                select new ReservationViewModel
+                                {
+                                    RoomId = r.Id,
+                                    ReservationID = res.Id,
+                                    GuestName = g.Name,
+                                    GuestSurname = g.Surname,
+                                    RoomNumber = r.RoomNumber.ToString(),
+                                    Status = r.Status,
+                                    Floor = r.Floor,
+                                    Beds = r.Beds,
+                                    TotalCost = res.TotalCost, 
+                                    StartDate = res.StartDate,
+                                    EndDate = res.EndDate
+                                }).ToList();
+
+            return reservations;
+        }
         public ReservationViewModel GetDetailed(int id)
         {
             return (from rr in _context.ReservationRooms

@@ -19,7 +19,7 @@ namespace HotelReservationSystem.Models
         public DateTime EndDate { get; set; }
 
         [Required]
-        [DataType(DataType.Currency)]
+    
         public decimal TotalCost { get; set; }
 
         [ForeignKey("Guest")]

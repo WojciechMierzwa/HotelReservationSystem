@@ -1,43 +1,76 @@
 ﻿@model HotelReservationSystem.Models.TypeModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create Room Type";
 }
 
-<h1>Create</h1>
+<div class="container mt-5">
+    <h1 class="mb-4 text-primary">Create Room Type</h1>
 
-<h4>TypeModel</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="BaseCost" class="control-label"></label>
-                <input asp-for="BaseCost" class="form-control" />
-                <span asp-validation-for="BaseCost" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="HighSeasonCost" class="control-label"></label>
-                <input asp-for="HighSeasonCost" class="form-control" />
-                <span asp-validation-for="HighSeasonCost" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">New Room Type Information</h4>
+        </div>
+        <div class="card-body">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label asp-for="Name" class="form-label fw-bold"></label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label asp-for="BaseCost" class="form-label fw-bold"></label>
+                        <div class="input-group">
+                            <input asp-for="BaseCost" class="form-control" type="number" step="1" min="0" />
+                            <span class="input-group-text">PLN</span>
+                        </div>
+                        <span asp-validation-for="BaseCost" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="HighSeasonCost" class="form-label fw-bold"></label>
+                        <div class="input-group">
+                            <input asp-for="HighSeasonCost" class="form-control" type="number" step="1" min="0" />
+                            <span class="input-group-text">PLN</span>
+                        </div>
+                        <span asp-validation-for="HighSeasonCost" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="card-footer bg-light">
+                    <button type="submit" class="btn btn-success me-2">
+                        <i class="bi bi-plus-circle"></i> Create
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left"></i> Back to List
+                    </a>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        // Remove decimal part from BaseCost and HighSeasonCost inputs
+        ['BaseCost', 'HighSeasonCost'].forEach(function (id) {
+            document.getElementById(id).addEventListener('input', function (e) {
+                let value = this.value;
+                // Remove any decimal part (everything after . or ,)
+                if (value.includes('.') || value.includes(',')) {
+                    this.value = value.split(/[.,]/)[0];
+                }
+                // Ensure only non-negative integers are allowed
+                this.value = this.value.replace(/[^0-9]/g, '');
+            });
+        });
+    </script>
 }

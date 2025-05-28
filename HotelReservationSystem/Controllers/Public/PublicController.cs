@@ -15,18 +15,25 @@ namespace HotelReservationSystem.Controllers.Public
         private readonly IRoomInterface _roomRepo;
         private readonly IHotelInterface _hotelRepo;
         private readonly ITypeInterface _typeRepo;
+        private readonly IReservationInterface _reservationRepo;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
 
         public PublicController(
     ManagerContext context,
     IRoomInterface roomRepo,
     IHotelInterface hotelRepo,
-    ITypeInterface typeRepo)
+    ITypeInterface typeRepo,
+    IReservationInterface reservationRepo,
+    IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             _roomRepo = roomRepo;
             _hotelRepo = hotelRepo;
             _typeRepo = typeRepo;
+            _reservationRepo = reservationRepo;
+            _httpContextAccessor = httpContextAccessor;
+
         }
 
 
@@ -272,6 +279,39 @@ namespace HotelReservationSystem.Controllers.Public
         }
 
 
+        public ActionResult MyReservations()
+        {
+            // Debug: Log all session keys and values
+            var session = _httpContextAccessor.HttpContext.Session;
+            var sessionData = new Dictionary<string, string>();
+            foreach (var key in session.Keys)
+            {
+                var value = session.GetString(key) ?? session.GetInt32(key)?.ToString() ?? "null";
+                sessionData.Add(key, value);
+                Console.WriteLine($"Session Key: {key}, Value: {value}");
+            }
+            TempData["SessionDebug"] = string.Join("; ", sessionData.Select(kv => $"{kv.Key}: {kv.Value}"));
+
+            // Retrieve GuestId using the correct session key
+            var guestId = _httpContextAccessor.HttpContext.Session.GetInt32("GuestId");
+            if (guestId == null)
+            {
+                TempData["Error"] = "Please log in to view your reservations.";
+                return RedirectToAction("Login");
+            }
+
+            var reservations = _reservationRepo.GetAllReservationsWithDetailsOfUser(guestId.Value);
+            return View(reservations);
+        }
+        public IActionResult ReservationDetails(int id)
+        {
+            var reservation = _reservationRepo.GetDetailed(id);
+            if (reservation == null)
+            {
+                return NotFound();
+            }
+            return View(reservation);
+        }
 
 
 

@@ -1,72 +1,96 @@
 ﻿@model HotelReservationSystem.ViewModels.ReservationViewModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit Reservation";
 }
 
-<h1>Edit</h1>
+<div class="container mt-5">
+    <h1 class="mb-4 text-primary">Edit Reservation</h1>
 
-<h4>ReservationViewModel</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="ReservationID" />
-            <input type="hidden" asp-for="RoomId" />
-            <div class="form-group">
-                <label asp-for="GuestName" class="control-label"></label>
-                <input asp-for="GuestName" class="form-control" />
-                <span asp-validation-for="GuestName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="GuestSurname" class="control-label"></label>
-                <input asp-for="GuestSurname" class="form-control" />
-                <span asp-validation-for="GuestSurname" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RoomNumber" class="control-label"></label>
-                <input asp-for="RoomNumber" class="form-control" />
-                <span asp-validation-for="RoomNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Floor" class="control-label"></label>
-                <input asp-for="Floor" class="form-control" />
-                <span asp-validation-for="Floor" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Beds" class="control-label"></label>
-                <input asp-for="Beds" class="form-control" />
-                <span asp-validation-for="Beds" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TotalCost" class="control-label"></label>
-                <input asp-for="TotalCost" class="form-control" />
-                <span asp-validation-for="TotalCost" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="StartDate" class="control-label"></label>
-                <input asp-for="StartDate" class="form-control" type="date" />
-                <span asp-validation-for="StartDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EndDate" class="control-label"></label>
-                <input asp-for="EndDate" class="form-control" type="date" />
-                <span asp-validation-for="EndDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Status" class="control-label">Status</label>
-                <select asp-for="Status" class="form-control">
-                    <option value="Occupied">Check In</option>
-                    <option value="Available">Check Out</option>
-                </select>
-                <span asp-validation-for="Status" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-                <a asp-action="ManageAllReservations" class="btn btn-secondary">Back to List</a>
-            </div>
-        </form>
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Reservation Information</h4>
+        </div>
+        <div class="card-body">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                <input type="hidden" asp-for="ReservationID" />
+                <input type="hidden" asp-for="RoomId" />
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label asp-for="GuestName" class="form-label fw-bold"></label>
+                        <input asp-for="GuestName" class="form-control" />
+                        <span asp-validation-for="GuestName" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="GuestSurname" class="form-label fw-bold"></label>
+                        <input asp-for="GuestSurname" class="form-control" />
+                        <span asp-validation-for="GuestSurname" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label asp-for="RoomNumber" class="form-label fw-bold"></label>
+                        <input asp-for="RoomNumber" class="form-control" readonly />
+                        <span asp-validation-for="RoomNumber" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="Floor" class="form-label fw-bold"></label>
+                        <input asp-for="Floor" class="form-control" readonly />
+                        <span asp-validation-for="Floor" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label asp-for="Beds" class="form-label fw-bold"></label>
+                        <input asp-for="Beds" class="form-control" readonly />
+                        <span asp-validation-for="Beds" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="TotalCost" class="form-label fw-bold"></label>
+                        <div class="input-group">
+                            <input asp-for="TotalCost" class="form-control" type="number" step="1" min="0" value="@((int)Model.TotalCost)" />
+                            <span class="input-group-text">PLN</span>
+                        </div>
+                        <span asp-validation-for="TotalCost" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label asp-for="StartDate" class="form-label fw-bold"></label>
+                        <input asp-for="StartDate" class="form-control" type="date" />
+                        <span asp-validation-for="StartDate" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="EndDate" class="form-label fw-bold"></label>
+                        <input asp-for="EndDate" class="form-control" type="date" />
+                        <span asp-validation-for="EndDate" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Status" class="form-label fw-bold"></label>
+                    <select asp-for="Status" class="form-select">
+                        <option value="Occupied">Check In</option>
+                        <option value="Available">Check Out</option>
+                    </select>
+                    <span asp-validation-for="Status" class="text-danger"></span>
+                </div>
+
+                <div class="card-footer bg-light">
+                    <button type="submit" class="btn btn-success me-2">
+                        <i class="bi bi-save"></i> Save
+                    </button>
+                    <a asp-action="ManageAllReservations" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left"></i> Back to List
+                    </a>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
@@ -74,4 +98,16 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    <script>
+        // Remove decimal part from TotalCost input
+        document.getElementById('TotalCost').addEventListener('input', function (e) {
+            let value = this.value;
+            // Remove any decimal part (everything after . or ,)
+            if (value.includes('.') || value.includes(',')) {
+                this.value = value.split(/[.,]/)[0];
+            }
+            // Ensure only non-negative integers are allowed
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+    </script>
 }
