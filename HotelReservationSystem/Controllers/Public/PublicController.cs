@@ -212,7 +212,7 @@ namespace HotelReservationSystem.Controllers.Public
                 return RedirectToAction("EnterGuestDetails");
             }
 
-            // Pobierz zalogowanego gościa (np. z sesji)
+   
             var guestId = HttpContext.Session.GetInt32("GuestId");
             if (guestId == null)
             {
@@ -228,13 +228,13 @@ namespace HotelReservationSystem.Controllers.Public
                 var room = _context.Rooms.Include(r => r.Type).FirstOrDefault(r => r.Id == roomId);
                 if (room != null && room.Type != null)
                 {
-                    // Prosta kalkulacja kosztu na podstawie liczby dni i bazowej ceny
+                
                     int days = (toDate - fromDate).Days;
-                    totalCost += room.Type.BaseCost * days; // Możesz dodać logikę sezonu wysokiego
+                    totalCost += room.Type.BaseCost * days; 
                 }
             }
 
-            // Tworzymy rezerwację
+            
             var reservation = new ReservationModel
             {
                 StartDate = fromDate,
@@ -257,11 +257,11 @@ namespace HotelReservationSystem.Controllers.Public
                 _context.ReservationRooms.Add(reservationRoom);
 
                 // Aktualizujemy status pokoju na "Occupied" lub inny
-                var roomToUpdate = _context.Rooms.Find(roomId);
+                /*var roomToUpdate = _context.Rooms.Find(roomId);
                 if (roomToUpdate != null)
                 {
                     roomToUpdate.Status = "Occupied";
-                }
+                }*/
             }
 
             _context.SaveChanges();
@@ -269,6 +269,14 @@ namespace HotelReservationSystem.Controllers.Public
             HttpContext.Session.Remove("ReservedRoomIds");
 
             TempData["Success"] = $"Rezerwacja od {fromDate.ToShortDateString()} do {toDate.ToShortDateString()} została zapisana.";
+          
+            var guest = _context.Guests.FirstOrDefault(g => g.GuestId == guestId);
+            var rooms = _context.Rooms.Include(r => r.Type).Where(r => reservedRoomIds.Contains(r.Id)).ToList();
+
+  
+            var mailer = new Mail();
+            mailer.SendReservationConfirmation(guest, reservation, rooms);
+
 
             return RedirectToAction("Confirm");
         }
@@ -326,7 +334,9 @@ namespace HotelReservationSystem.Controllers.Public
             if (ModelState.IsValid)
             {
                 _context.Guests.Add(model);     
-                _context.SaveChanges();  
+                _context.SaveChanges();
+                var mailer = new Mail();
+                mailer.WelcomeEmail(model);
 
                 return RedirectToAction("Login");
             }
