@@ -1,12 +1,12 @@
 ﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="pl" data-bs-theme="light">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>@ViewData["Title"] - HotelReservationSystem</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
@@ -16,19 +16,16 @@
             <div class="container-fluid">
                 <a class="navbar-brand" asp-controller="Public" asp-action="Index">Hotel Reservation System</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                aria-expanded="false" aria-label="Toggle navigation">
+                        aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         @{
-
-                            var session = HttpContextAccessor.HttpContext.Session;
-                            var userRole = session.GetString("UserRole");
-
-                            Console.Write(userRole);
-                            var isGuest = session.GetInt32("GuestId") != null;
-                            var isEmployee = session.GetInt32("EmployeeId") != null;
+                            var session = HttpContextAccessor.HttpContext?.Session;
+                            var userRole = session?.GetString("UserRole");
+                            var isGuest = session?.GetInt32("GuestId") != null;
+                            var isEmployee = session?.GetInt32("EmployeeId") != null;
                         }
                         @if (userRole == "Admin")
                         {
@@ -65,6 +62,11 @@
                             <li class="nav-item"><a class="nav-link" asp-controller="Public" asp-action="Register">Register</a></li>
                             <li class="nav-item"><a class="nav-link" asp-controller="Public" asp-action="LoginEmployee">Login as Employee</a></li>
                         }
+                        <li class="nav-item">
+                            <button class="nav-link btn btn-link theme-toggle" id="themeToggle" title="Toggle Dark Mode">
+                                <i class="bi bi-sun-fill"></i>
+                            </button>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -83,19 +85,39 @@
         </div>
     </footer>
 
-    <!-- jQuery -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <!-- Bootstrap JS -->
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- DataTables JS -->
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
-    <!-- Custom JS -->
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        // Skrypt do przełączania trybu ciemnego
+        document.getElementById('themeToggle').addEventListener('click', function () {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-bs-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            html.setAttribute('data-bs-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+        });
+
+        // Funkcja do aktualizacji ikony przełącznika
+        function updateThemeIcon(theme) {
+            const icon = document.querySelector('#themeToggle i');
+            icon.className = theme === 'light' ? 'bi bi-sun-fill' : 'bi bi-moon-stars-fill';
+        }
+
+        // Ustaw tryb i ikonę na podstawie zapisanego w localStorage
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-bs-theme', savedTheme);
+            updateThemeIcon(savedTheme);
+        });
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 <style>
-    /* Stylizacja navbaru */
+    /* Stylizacja navbaru dla trybu jasnego */
     .navbar-custom {
         background: linear-gradient(135deg, #1e3a8a, #3b82f6);
         border-radius: 0 0 15px 15px;
@@ -113,7 +135,7 @@
         }
 
             .navbar-custom .navbar-brand:hover {
-                color: #facc15;
+                color: #f0b841;
                 transform: scale(1.05);
             }
 
@@ -129,13 +151,13 @@
         }
 
             .navbar-custom .nav-link:hover {
-                background-color: rgba(255, 255, 255, 0.15);
+                background-color: rgba(240, 184, 65, 0.2);
                 color: #ffffff;
                 transform: translateY(-2px);
             }
 
             .navbar-custom .nav-link.active {
-                background-color: rgba(255, 255, 255, 0.25);
+                background-color: rgba(240, 184, 65, 0.3);
                 color: #ffffff;
                 font-weight: 600;
             }
@@ -155,5 +177,136 @@
     .navbar-toggler:hover {
         transform: rotate(90deg);
     }
+
+    .theme-toggle {
+        color: #ffffff;
+        font-size: 1.2rem;
+        padding: 0.5rem;
+    }
+
+        .theme-toggle:hover {
+            color: #f0b841;
+        }
+
+    /* Stylizacja dla trybu ciemnego */
+    [data-bs-theme="dark"] .navbar-custom {
+        background: linear-gradient(135deg, #1a365d, #111827);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    }
+
+        [data-bs-theme="dark"] .navbar-custom .navbar-brand {
+            color: #e5e7eb;
+        }
+
+            [data-bs-theme="dark"] .navbar-custom .navbar-brand:hover {
+                color: #f0b841;
+                transform: scale(1.05);
+            }
+
+        [data-bs-theme="dark"] .navbar-custom .nav-link {
+            color: #d1d5db;
+        }
+
+            [data-bs-theme="dark"] .navbar-custom .nav-link:hover {
+                background-color: rgba(240, 184, 65, 0.15);
+                color: #ffffff;
+                transform: translateY(-2px);
+            }
+
+            [data-bs-theme="dark"] .navbar-custom .nav-link.active {
+                background-color: rgba(240, 184, 65, 0.25);
+                color: #ffffff;
+                font-weight: 600;
+            }
+
+    [data-bs-theme="dark"] .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba(229, 231, 235, 0.9)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+    }
+
+    [data-bs-theme="dark"] .theme-toggle {
+        color: #d1d5db;
+    }
+
+        [data-bs-theme="dark"] .theme-toggle:hover {
+            color: #f0b841;
+        }
+
+    /* Stylizacja reszty strony dla trybu ciemnego */
+    [data-bs-theme="dark"] body {
+        background-color: #111827;
+        color: #e5e7eb;
+    }
+
+    [data-bs-theme="dark"] .footer {
+        background-color: #0a0e17;
+        color: #9ca3af;
+    }
+
+    [data-bs-theme="dark"] .card {
+        background-color: #1f2937;
+        color: #e5e7eb;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    [data-bs-theme="dark"] .card-header {
+        background-color: #374151;
+        color: #ffffff;
+    }
+
+    [data-bs-theme="dark"] .btn-primary {
+        background: linear-gradient(135deg, #1a365d, #f0b841);
+        border: none;
+    }
+
+        [data-bs-theme="dark"] .btn-primary:hover {
+            background: linear-gradient(135deg, #f0b841, #1a365d);
+            transform: translateY(-2px);
+        }
+
+    [data-bs-theme="dark"] .btn-outline-primary {
+        border-color: #f0b841;
+        color: #f0b841;
+    }
+
+        [data-bs-theme="dark"] .btn-outline-primary:hover {
+            background-color: #f0b841;
+            color: #1a365d;
+        }
+
+    /* Stylizacja tabeli dla trybu ciemnego */
+    [data-bs-theme="dark"] .table {
+        background-color: #1f2937;
+        color: #e5e7eb; /* Jasny tekst dla wszystkich komórek */
+    }
+
+        [data-bs-theme="dark"] .table th,
+        [data-bs-theme="dark"] .table td {
+            color: #e5e7eb; /* Zapewnia jasny tekst w każdej komórce */
+        }
+
+    [data-bs-theme="dark"] .table-striped > tbody > tr:nth-of-type(odd) > * {
+        --bs-table-bg-type: #2d3748; /* Ciemniejszy odcień dla nieparzystych wierszy */
+        color: #e5e7eb; /* Jasny tekst dla nieparzystych wierszy */
+    }
+
+    [data-bs-theme="dark"] .table-striped > tbody > tr:nth-of-type(even) > * {
+        --bs-table-bg-type: #1f2937; /* Jaśniejszy odcień dla parzystych wierszy */
+        color: #e5e7eb; /* Jasny tekst dla parzystych wierszy */
+    }
+
+    [data-bs-theme="dark"] .table-hover > tbody > tr:hover > * {
+        --bs-table-accent-bg: #374151; /* Tło przy najechaniu w trybie ciemnym */
+        color: #e5e7eb; /* Jasny tekst przy najechaniu */
+    }
+
+    /* Stylizacja linków akcji w tabeli */
+    [data-bs-theme="dark"] .table a {
+        color: #f0b841;
+    }
+
+        [data-bs-theme="dark"] .table a:hover {
+            color: #ffffff;
+            text-decoration: underline;
+        }
 </style>
 </html>
