@@ -18,9 +18,46 @@ namespace HotelReservationSystem.Controllers.Admin
             _typeRepo = typeRepo;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int? floor, bool? airConditioned, int? beds, string status, int? roomNumber, string type, string city)
         {
-            return View(_roomRepo.GetAll());
+           
+            ViewData["CurrentFloor"] = floor;
+            ViewData["CurrentAirConditioned"] = airConditioned?.ToString();
+            ViewData["CurrentBeds"] = beds;
+            ViewData["CurrentStatus"] = status;
+            ViewData["CurrentRoomNumber"] = roomNumber;
+            ViewData["CurrentType"] = type;
+            ViewData["CurrentCity"] = city;
+
+            var rooms = _roomRepo.GetAll();
+
+         
+            if (floor.HasValue)
+                rooms = rooms.Where(r => r.Floor == floor.Value).ToList();
+
+            if (airConditioned.HasValue)
+                rooms = rooms.Where(r => r.AirConditioned == airConditioned.Value).ToList();
+
+            if (beds.HasValue)
+                rooms = rooms.Where(r => r.Beds == beds.Value).ToList();
+
+            if (!string.IsNullOrEmpty(status))
+                rooms = rooms.Where(r => r.Status.Contains(status, StringComparison.OrdinalIgnoreCase)).ToList();
+
+            if (roomNumber.HasValue)
+                rooms = rooms.Where(r => r.RoomNumber == roomNumber.Value).ToList();
+
+            if (!string.IsNullOrEmpty(type))
+                rooms = rooms.Where(r => r.Type != null && r.Type.Name.Equals(type, StringComparison.OrdinalIgnoreCase)).ToList();
+
+            if (!string.IsNullOrEmpty(city))
+                rooms = rooms.Where(r => r.Hotel != null && r.Hotel.City.Equals(city, StringComparison.OrdinalIgnoreCase)).ToList();
+
+          
+            ViewBag.RoomTypes = _typeRepo.GetAll().Select(t => t.Name).Distinct().ToList();
+            ViewBag.HotelCities = _hotelRepo.GetAll().Select(h => h.City).Distinct().ToList();
+
+            return View(rooms);
         }
 
         public IActionResult Details(int id)

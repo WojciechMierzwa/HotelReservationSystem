@@ -321,7 +321,74 @@ namespace HotelReservationSystem.Controllers.Public
                 return RedirectToAction(nameof(Delete), new { id });
             }
         }
+        [HttpGet]
+        public IActionResult ChangePassword()
+        {
+            var guestId = HttpContext.Session.GetInt32("GuestId");
 
+            if (guestId == null)
+            {
+                TempData["Error"] = "Please log in to change your password.";
+                return RedirectToAction("Login");
+            }
+
+            var user = _context.Guests.FirstOrDefault(g => g.GuestId == guestId);
+            if (user == null)
+            {
+                HttpContext.Session.Clear();
+                TempData["Error"] = "User not found. Please log in again.";
+                return RedirectToAction("Login");
+            }
+
+            return View(user);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ChangePassword(int id, GuestModel guest)
+        {
+            if (id != guest.GuestId)
+            {
+                TempData["Error"] = "Invalid user ID.";
+                return RedirectToAction("Profile");
+            }
+
+            // Validate password manually to respect GuestModel constraints
+            if (string.IsNullOrEmpty(guest.Password))
+            {
+                ModelState.AddModelError("Password", "The Password field is required.");
+            }
+            else if (guest.Password.Length > 255)
+            {
+                ModelState.AddModelError("Password", "Password cannot exceed 255 characters.");
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var existingGuest = _context.Guests.FirstOrDefault(g => g.GuestId == id);
+                    if (existingGuest == null)
+                    {
+                        TempData["Error"] = "User not found.";
+                        return RedirectToAction("Profile");
+                    }
+
+                    existingGuest.Password = guest.Password;
+                    _context.SaveChanges();
+
+                    TempData["Success"] = "Password updated successfully.";
+                    return RedirectToAction("Profile");
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", $"An error occurred while updating the password: {ex.Message}");
+                    return View(guest);
+                }
+            }
+
+            return View(guest);
+        }
 
 
         public ActionResult MyReservations()

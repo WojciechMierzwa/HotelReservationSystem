@@ -4,68 +4,98 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-primary">Create New</a>
 </p>
-<table class="table">
+
+<form asp-action="Index" method="get" class="mb-4">
+    <div class="row g-3">
+        <div class="col-md-2">
+            <label for="floor" class="form-label">Floor</label>
+            <input type="number" name="floor" class="form-control" value="@ViewData["CurrentFloor"]" />
+        </div>
+        <div class="col-md-2">
+            <label for="airConditioned" class="form-label">Air Conditioning</label>
+            <select name="airConditioned" class="form-select">
+                <option value="">Wszystkie</option>
+                <option value="true" selected="@(ViewData["CurrentAirConditioned"]?.ToString() == "true")">Yes</option>
+                <option value="false" selected="@(ViewData["CurrentAirConditioned"]?.ToString() == "false")">No</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <label for="beds" class="form-label">Beds</label>
+            <input type="number" name="beds" class="form-control" value="@ViewData["CurrentBeds"]" />
+        </div>
+        <div class="col-md-2">
+            <label for="status" class="form-label">Status</label>
+            <input type="text" name="status" class="form-control" value="@ViewData["CurrentStatus"]" />
+        </div>
+        <div class="col-md-2">
+            <label for="roomNumber" class="form-label">Number</label>
+            <input type="text" name="roomNumber" class="form-control" value="@ViewData["CurrentRoomNumber"]" />
+        </div>
+        <div class="col-md-2">
+            <label for="type" class="form-label">Type</label>
+            <select name="type" class="form-select">
+                <option value="">Wszystkie</option>
+                @foreach (var type in ViewBag.RoomTypes ?? new List<string>())
+                {
+                    <option value="@type" selected="@(ViewData["CurrentType"]?.ToString() == type)">@type</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-2">
+            <label for="city" class="form-label">City</label>
+            <select name="city" class="form-select">
+                <option value="">Wszystkie</option>
+                @foreach (var city in ViewBag.HotelCities ?? new List<string>())
+                {
+                    <option value="@city" selected="@(ViewData["CurrentCity"]?.ToString() == city)">@city</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-12 mt-3">
+            <button type="submit" class="btn btn-primary">Filter</button>
+            <a asp-action="Index" class="btn btn-secondary">Clear</a>
+        </div>
+    </div>
+</form>
+
+<table class="table table-striped">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Floor)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AirConditioned)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Beds)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RoomNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Type)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Hotel)
-            </th>
-            <th></th>
+            <th>@Html.DisplayNameFor(model => model.Floor)</th>
+            <th>@Html.DisplayNameFor(model => model.AirConditioned)</th>
+            <th>@Html.DisplayNameFor(model => model.Beds)</th>
+            <th>@Html.DisplayNameFor(model => model.Status)</th>
+            <th>@Html.DisplayNameFor(model => model.RoomNumber)</th>
+            <th>@Html.DisplayNameFor(model => model.Type)</th>
+            <th>@Html.DisplayNameFor(model => model.Hotel)</th>
+            <th>Akcje</th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Floor)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AirConditioned)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Beds)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RoomNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Type.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Hotel.City)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Floor)</td>
+                <td>@(item.AirConditioned ? "Tak" : "Nie")</td>
+                <td>@Html.DisplayFor(modelItem => item.Beds)</td>
+                <td>@Html.DisplayFor(modelItem => item.Status)</td>
+                <td>@Html.DisplayFor(modelItem => item.RoomNumber)</td>
+                <td>@Html.DisplayFor(modelItem => item.Type.Name)</td>
+                <td>@Html.DisplayFor(modelItem => item.Hotel.City)</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit</a>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Details</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+@section Scripts {
+    <!-- Opcjonalnie, jeśli chcesz dodać interaktywność po stronie klienta -->
+}
