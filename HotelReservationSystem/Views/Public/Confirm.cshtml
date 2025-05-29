@@ -1,8 +1,8 @@
 ﻿@{
-    ViewData["Title"] = "Potwierdzenie rezerwacji";
+    ViewData["Title"] = "Booking confirmation";
 }
 
-<h2>Potwierdzenie rezerwacji</h2>
+<h2>Booking confirmation</h2>
 
 @if (TempData["Success"] != null)
 {
@@ -13,8 +13,8 @@
 else
 {
     <div class="alert alert-info">
-        Rezerwacja została przetworzona.
+        Booking complete
     </div>
 }
 
-<a asp-action="Index" asp-controller="Public" class="btn btn-primary">Powrót do strony głównej</a>
+<a asp-action="Index" asp-controller="Public" class="btn btn-primary">Return to Home Page</a>

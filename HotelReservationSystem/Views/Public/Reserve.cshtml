@@ -1,21 +1,21 @@
 ﻿@model HotelReservationSystem.ViewModels.RoomFilterViewModel
 
 @{
-    ViewData["Title"] = "Rezerwacja pokoi";
+    ViewData["Title"] = "Room Reservation";
 }
 
-<h1 class="mb-4">Dostępne pokoje</h1>
+<h1 class="mb-4">Available Rooms</h1>
 
 <form method="get" class="mb-4 row g-3">
     <div class="col-md-3">
-        <label for="beds" class="form-label">Liczba łóżek</label>
+        <label for="beds" class="form-label">Number of Beds</label>
         <input type="number" class="form-control" name="beds" value="@Model.Beds" />
     </div>
 
     <div class="col-md-3">
-        <label for="typeId" class="form-label">Typ pokoju</label>
+        <label for="typeId" class="form-label">Room Type</label>
         <select class="form-select" name="typeId">
-            <option value="">-- Wszystkie --</option>
+            <option value="">-- All --</option>
             @foreach (var type in Model.Types)
             {
                 <option value="@type.Id" selected="@(type.Id == Model.TypeId ? "selected" : null)">
@@ -26,9 +26,9 @@
     </div>
 
     <div class="col-md-3">
-        <label for="hotelId" class="form-label">Lokalizacja (hotel)</label>
+        <label for="hotelId" class="form-label">Location (Hotel)</label>
         <select class="form-select" name="hotelId">
-            <option value="">-- Wszystkie --</option>
+            <option value="">-- All --</option>
             @foreach (var hotel in Model.Hotels)
             {
                 <option value="@hotel.Id" selected="@(hotel.Id == Model.HotelId ? "selected" : null)">
@@ -39,25 +39,25 @@
     </div>
 
     <div class="col-md-3 d-flex align-items-end gap-2">
-        <button type="submit" class="btn btn-primary w-50">Filtruj</button>
-        <a href="@Url.Action("EnterGuestDetails", "Public")" class="btn btn-secondary w-50">Dalej</a>
+        <button type="submit" class="btn btn-primary w-50">Filter</button>
+        <a href="@Url.Action("EnterGuestDetails", "Public")" class="btn btn-secondary w-50">Next</a>
     </div>
 </form>
 
 @if (!Model.Rooms.Any())
 {
-    <div class="alert alert-info">Brak dostępnych pokoi dla wybranych filtrów.</div>
+    <div class="alert alert-info">No rooms available for the selected filters.</div>
 }
 else
 {
     <table class="table table-bordered table-striped">
         <thead class="table-light">
             <tr>
-                <th>Piętro</th>
-                <th>Klimatyzacja</th>
-                <th>Łóżka</th>
-                <th>Numer pokoju</th>
-                <th>Typ</th>
+                <th>Floor</th>
+                <th>Air Conditioning</th>
+                <th>Beds</th>
+                <th>Room Number</th>
+                <th>Type</th>
                 <th>Hotel</th>
                 <th></th>
             </tr>
@@ -67,20 +67,20 @@ else
             {
                 <tr>
                     <td>@room.Floor</td>
-                    <td>@(room.AirConditioned ? "Tak" : "Nie")</td>
+                    <td>@(room.AirConditioned ? "Yes" : "No")</td>
                     <td>@room.Beds</td>
                     <td>@room.RoomNumber</td>
                     <td>@room.Type?.Name</td>
                     <td>@room.Hotel?.City</td>
                     <td>
-                        <button class="btn btn-success btn-sm btn-reserve" data-room-id="@room.Id">Rezerwuj</button>
+                        <button class="btn btn-success btn-sm btn-reserve" data-room-id="@room.Id">Reserve</button>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
-
 }
+
 @section Scripts {
     <script>
         document.querySelectorAll('.btn-reserve').forEach(button => {
@@ -92,12 +92,11 @@ else
                             const row = this.closest('tr');
                             if(row) row.remove();
                         } else {
-                            alert('Nie udało się dodać pokoju do rezerwacji.');
+                            alert('Failed to add room to reservation.');
                         }
                     })
-                    .catch(() => alert('Błąd podczas komunikacji z serwerem.'));
+                    .catch(() => alert('Error communicating with the server.'));
             });
         });
     </script>
 }
-

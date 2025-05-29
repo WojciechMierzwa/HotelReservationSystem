@@ -7,16 +7,15 @@
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-8 col-lg-6">
-            <h2 class="text-center mb-4">Profil Pracownika</h2>
             <div class="card shadow-sm">
                 <div class="card-body p-4">
-                    <h5 class="card-title text-center mb-4">Informacje o Pracowniku</h5>
+                    <h5 class="card-title text-center mb-4">Employee:</h5>
                     <div class="row mb-3">
-                        <div class="col-4 fw-bold text-primary">Imię:</div>
+                        <div class="col-4 fw-bold text-primary">Name:</div>
                         <div class="col-8">@Model.Name</div>
                     </div>
                     <div class="row mb-3">
-                        <div class="col-4 fw-bold text-primary">Nazwisko:</div>
+                        <div class="col-4 fw-bold text-primary">Surname:</div>
                         <div class="col-8">@Model.Surname</div>
                     </div>
                     <div class="row mb-3">
@@ -28,11 +27,11 @@
                         <div class="col-8">@Model.Hotel_Id</div>
                     </div>
                     <div class="row mb-3">
-                        <div class="col-4 fw-bold text-primary">Rola:</div>
-                        <div class="col-8">@(Model.IsAdmin ? "Administrator" : "Pracownik")</div>
+                        <div class="col-4 fw-bold text-primary">Role:</div>
+                        <div class="col-8">@(Model.IsAdmin ? "Administrator" : "Employee")</div>
                     </div>
                     <div class="text-center mt-4">
-                        <a href="@Url.Action("Logout", "Public")" class="btn btn-outline-primary">Wyloguj się</a>
+                        <a href="@Url.Action("Logout", "Public")" class="btn btn-outline-primary">Log out</a>
                     </div>
                 </div>
             </div>

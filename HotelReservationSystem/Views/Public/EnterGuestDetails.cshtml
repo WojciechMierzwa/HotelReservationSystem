@@ -1,28 +1,28 @@
 ﻿@model HotelReservationSystem.ViewModels.GuestDetailsViewModel
 
 @{
-    ViewData["Title"] = "Szczegóły gościa";
+    ViewData["Title"] = "Guest Details";
 }
 
-<h1>Szczegóły gościa</h1>
+<h1>Guest Details</h1>
 
 @if (!Model.SelectedRooms.Any())
 {
-    <div class="alert alert-warning">Brak wybranych pokoi. Proszę wrócić i wybrać pokoje.</div>
+    <div class="alert alert-warning">No rooms selected. Please go back and select rooms.</div>
 }
 else
 {
     <form method="post" asp-action="ConfirmReservation" class="mb-4">
 
         <div class="mb-3">
-            <label>Wybrane pokoje:</label>
+            <label>Selected Rooms:</label>
             <ul>
                 @foreach (var room in Model.SelectedRooms)
                 {
                     <li data-base-cost="@room.Type.BaseCost.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)"
                         data-high-cost="@room.Type.HighSeasonCost.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)">
-                        Pokój nr: @room.RoomNumber (Typ: @room.Type?.Name, Cena bazowa: @room.Type?.BaseCost.ToString("C"))
-                        <a asp-action="RemoveRoomFromReservation" asp-route-id="@room.Id" class="btn btn-danger btn-sm ms-2">Usuń</a>
+                        Room No: @room.RoomNumber (Type: @room.Type?.Name, Base Price: @room.Type?.BaseCost.ToString("C"))
+                        <a asp-action="RemoveRoomFromReservation" asp-route-id="@room.Id" class="btn btn-danger btn-sm ms-2">Remove</a>
                     </li>
                 }
             </ul>
@@ -30,22 +30,22 @@ else
 
         <div class="row mb-3">
             <div class="col-md-6">
-                <label for="DateFrom" class="form-label">Data od:</label>
+                <label for="DateFrom" class="form-label">Check-in Date:</label>
                 <input asp-for="DateFrom" type="date" class="form-control" required />
             </div>
             <div class="col-md-6">
-                <label for="DateTo" class="form-label">Data do:</label>
+                <label for="DateTo" class="form-label">Check-out Date:</label>
                 <input asp-for="DateTo" type="date" class="form-control" required />
             </div>
         </div>
 
         <div class="mb-3">
-            <label>Koszt całkowity:</label>
-            <div id="totalCost">@Model.TotalCost?.ToString("C") ?? "Wybierz daty"</div>
+            <label>Total Cost:</label>
+            <div id="totalCost">@Model.TotalCost?.ToString("C") ?? "Select dates"</div>
         </div>
 
-        <button type="submit" class="btn btn-primary">Potwierdź rezerwację</button>
-        <a asp-action="Reserve" class="btn btn-secondary ms-2">Powrót</a>
+        <button type="submit" class="btn btn-primary">Confirm Reservation</button>
+        <a asp-action="Reserve" class="btn btn-secondary ms-2">Back</a>
     </form>
 }
 
@@ -57,7 +57,7 @@ else
 
         function calculateCost() {
             if (!dateFrom.value || !dateTo.value) {
-                totalCostDiv.textContent = "Wybierz daty";
+                totalCostDiv.textContent = "Select dates";
                 return;
             }
 
@@ -65,14 +65,14 @@ else
             const toDate = new Date(dateTo.value);
 
             if (toDate <= fromDate) {
-                totalCostDiv.textContent = "Data do musi być po dacie od";
+                totalCostDiv.textContent = "Check-out date must be after check-in date";
                 return;
             }
 
-            // Sezon wysoki
+            // High season
             const year = fromDate.getFullYear();
-            const highSeasonStart = new Date(year, 6, 1);   // 1 czerwiec
-            const highSeasonEnd = new Date(year, 7, 30);    // 30 sierpnia
+            const highSeasonStart = new Date(year, 6, 1);   // 1 July
+            const highSeasonEnd = new Date(year, 7, 30);    // 30 August
 
             let highSeasonDays = 0;
             let normalDays = 0;
@@ -96,7 +96,7 @@ else
                 }
             });
 
-            totalCostDiv.textContent = total.toLocaleString('pl-PL', { style: 'currency', currency: 'PLN' });
+            totalCostDiv.textContent = total.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
         }
 
         dateFrom.addEventListener('change', calculateCost);

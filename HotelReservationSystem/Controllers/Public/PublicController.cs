@@ -234,6 +234,8 @@ namespace HotelReservationSystem.Controllers.Public
                 }
             }
 
+
+
             
             var reservation = new ReservationModel
             {
@@ -285,6 +287,41 @@ namespace HotelReservationSystem.Controllers.Public
         {
             return View();
         }
+
+        [HttpGet]
+        public IActionResult Delete(int id)
+        {
+            var reservation = _reservationRepo.GetDetailed(id);
+            if (reservation == null)
+            {
+                return NotFound();
+            }
+            return View(reservation);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteConfirmed(int id)
+        {
+            try
+            {
+                var reservation = _reservationRepo.GetDetailed(id);
+                if (reservation == null)
+                {
+                    return NotFound();
+                }
+
+                _reservationRepo.Delete(id);
+                TempData["Success"] = "Reservation deleted successfully.";
+                return RedirectToAction(nameof(MyReservations));
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = $"An error occurred while deleting the reservation: {ex.Message}";
+                return RedirectToAction(nameof(Delete), new { id });
+            }
+        }
+
 
 
         public ActionResult MyReservations()

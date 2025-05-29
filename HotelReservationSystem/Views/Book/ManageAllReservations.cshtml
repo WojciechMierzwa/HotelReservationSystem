@@ -1,34 +1,34 @@
 ﻿@model IEnumerable<HotelReservationSystem.ViewModels.ReservationViewModel>
 @{
-    ViewData["Title"] = "Zarządzanie rezerwacjami";
+    ViewData["Title"] = "Manage Reservations";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="container mt-4">
-    <h2 class="mb-4">Wszystkie rezerwacje</h2>
+    <h2 class="mb-4">All Reservations</h2>
 
     <div class="card shadow mb-4">
         <div class="card-header bg-secondary text-white">
-            <h5 class="mb-0">Filtrowanie rezerwacji</h5>
+            <h5 class="mb-0">Filter Reservations</h5>
         </div>
         <div class="card-body">
             <form id="filterForm" class="row g-3">
                 <div class="col-md-3">
-                    <label for="guestFilter" class="form-label">Imię/Nazwisko gościa</label>
-                    <input type="text" class="form-control" id="guestFilter" placeholder="Wpisz imię lub nazwisko">
+                    <label for="guestFilter" class="form-label">Guest Name/Surname</label>
+                    <input type="text" class="form-control" id="guestFilter" placeholder="Enter name or surname">
                 </div>
                 <div class="col-md-3">
-                    <label for="startDateFilter" class="form-label">Data przyjazdu od</label>
+                    <label for="startDateFilter" class="form-label">Check-in Date From</label>
                     <input type="date" class="form-control" id="startDateFilter">
                 </div>
                 <div class="col-md-3">
-                    <label for="endDateFilter" class="form-label">Data przyjazdu do</label>
+                    <label for="endDateFilter" class="form-label">Check-in Date To</label>
                     <input type="date" class="form-control" id="endDateFilter">
                 </div>
                 <div class="col-md-3 d-flex align-items-end">
                     <div>
-                        <button type="button" id="applyFilters" class="btn btn-primary me-2">Filtruj</button>
-                        <button type="button" id="resetFilters" class="btn btn-outline-secondary">Resetuj</button>
+                        <button type="button" id="applyFilters" class="btn btn-primary me-2">Filter</button>
+                        <button type="button" id="resetFilters" class="btn btn-outline-secondary">Reset</button>
                     </div>
                 </div>
             </form>
@@ -37,28 +37,28 @@
 
     <div class="card shadow">
         <div class="card-header bg-primary text-white">
-            <h5 class="mb-0">Lista rezerwacji</h5>
+            <h5 class="mb-0">Reservation List</h5>
         </div>
         <div class="card-body">
             <div class="table-responsive">
                 @if (!Model.Any())
                 {
-                    <div class="alert alert-info">Brak rezerwacji do wyświetlenia.</div>
+                    <div class="alert alert-info">No reservations to display.</div>
                 }
                 else
                 {
                     <table class="table table-striped table-hover" id="reservationsTable">
                         <thead class="thead-dark">
                             <tr>
-                                <th>Gość</th>
-                                <th>Numer pokoju</th>
-                                <th>Piętro</th>
-                                <th>Liczba łóżek</th>
-                                <th>Data rozpoczęcia</th>
-                                <th>Data zakończenia</th>
-                                <th>Długość pobytu (dni)</th>
-                                <th>Koszt całkowity</th>
-                                <th>Akcje</th>
+                                <th>Guest</th>
+                                <th>Room Number</th>
+                                <th>Floor</th>
+                                <th>Number of Beds</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Length of Stay (days)</th>
+                                <th>Total Cost</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -67,27 +67,27 @@
                                 <tr>
                                     <td>
                                         @(string.IsNullOrWhiteSpace(item.GuestName) && string.IsNullOrWhiteSpace(item.GuestSurname)
-                                            ? "Brak danych"
+                                            ? "No data"
                                             : $"{item.GuestName ?? ""} {item.GuestSurname ?? ""}".Trim())
                                     </td>
-                                    <td>@(item.RoomNumber ?? "Brak")</td>
+                                    <td>@(item.RoomNumber ?? "None")</td>
                                     <td>@item.Floor</td>
                                     <td>@item.Beds</td>
-                                    <td>@(item.StartDate == default(DateTime) ? "Brak" : item.StartDate.ToString("dd.MM.yyyy"))</td>
-                                    <td>@(item.EndDate == default(DateTime) ? "Brak" : item.EndDate.ToString("dd.MM.yyyy"))</td>
+                                    <td>@(item.StartDate == default(DateTime) ? "None" : item.StartDate.ToString("dd.MM.yyyy"))</td>
+                                    <td>@(item.EndDate == default(DateTime) ? "None" : item.EndDate.ToString("dd.MM.yyyy"))</td>
                                     <td>@((item.EndDate == default(DateTime) || item.StartDate == default(DateTime) ? 0 : (item.EndDate - item.StartDate).Days))</td>
                                     <td>@item.TotalCost.ToString("C2")</td>
                                     <td>
                                         <div class="btn-group">
                                             @if (item.ReservationID.HasValue)
                                             {
-                                                <a asp-action="ReservationDetails" asp-controller="Book" asp-route-id="@item.ReservationID" class="btn btn-sm btn-outline-info">Szczegóły</a>
-                                                <a asp-action="Edit" asp-controller="Book" asp-route-id="@item.ReservationID" class="btn btn-sm btn-outline-warning">Edytuj</a>
-                                                <a asp-action="Delete" asp-controller="Book" asp-route-id="@item.ReservationID" class="btn btn-sm btn-outline-danger">Anuluj</a>
+                                                <a asp-action="ReservationDetails" asp-controller="Book" asp-route-id="@item.ReservationID" class="btn btn-sm btn-outline-info">Details</a>
+                                                <a asp-action="Edit" asp-controller="Book" asp-route-id="@item.ReservationID" class="btn btn-sm btn-outline-warning">Edit</a>
+                                                <a asp-action="Delete" asp-controller="Book" asp-route-id="@item.ReservationID" class="btn btn-sm btn-outline-danger">Cancel</a>
                                             }
                                             else
                                             {
-                                                <span class="text-danger">Brak ID rezerwacji</span>
+                                                <span class="text-danger">No Reservation ID</span>
                                             }
                                         </div>
                                     </td>
@@ -105,13 +105,13 @@
     <script>
         $(document).ready(function () {
             if (!$.fn.DataTable) {
-                console.error("DataTables nie jest załadowane. Sprawdź, czy skrypty są poprawnie dołączone.");
+                console.error("DataTables is not loaded. Check if scripts are included correctly.");
                 return;
             }
 
             var table = $('#reservationsTable').DataTable({
                 "language": {
-                    "url": "https://cdn.datatables.net/plug-ins/1.13.4/i18n/pl.json"
+                    "url": "https://cdn.datatables.net/plug-ins/1.13.4/i18n/en-GB.json"
                 },
                 "responsive": true,
                 "order": [[4, "asc"]]
@@ -131,14 +131,14 @@
                 }
 
                 var dateParts = data[4].split('.');
-                if (data[4] === "Brak" || dateParts.length !== 3) {
-                    console.warn("Nieprawidłowy format daty lub brak daty w wierszu:", data[4]);
+                if (data[4] === "None" || dateParts.length !== 3) {
+                    console.warn("Invalid date format or missing date in row:", data[4]);
                     return false;
                 }
 
                 var rowDate = new Date(dateParts[2], dateParts[1] - 1, dateParts[0]);
                 if (isNaN(rowDate)) {
-                    console.warn("Nie można sparsować daty:", data[4]);
+                    console.warn("Unable to parse date:", data[4]);
                     return false;
                 }
 
@@ -161,7 +161,7 @@
                 var endDateFilter = $("#endDateFilter").val();
 
                 if (startDateFilter && endDateFilter && new Date(startDateFilter) > new Date(endDateFilter)) {
-                    alert("Data początkowa nie może być późniejsza niż data końcowa!");
+                    alert("Start date cannot be later than end date!");
                     return;
                 }
                 table.draw();
